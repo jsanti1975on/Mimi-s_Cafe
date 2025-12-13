@@ -59,9 +59,10 @@ Scripts may be run locally or from a central server share (e.g. `\\POS-FS01\Repo
 1. **Open PowerShell ISE** (as an instructor or student).  
 2. Run each script in order:  
    ```powershell
-   .\01_Build-MockFiscalEnvironment.ps1
-   .\03_OS_FiscalYear_FuzzyAndSpecial.ps1
-   .\04_OS_FiscalYear_DailyReport_UnifiedScan.ps1
+01_Build-MockFiscalEnvironment.ps1
+02_OS_FiscalYear_FuzzyNames.ps1
+03_OS_FiscalYear_FuzzyAndSpecial.ps1
+04_OS_FiscalYear_DailyReport_UnifiedScan.ps1
 3. Watch PowerShell color-coded output and Excel open with your audit summary!
 
 ### 🎓 Teaching Notes
