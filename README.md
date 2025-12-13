@@ -57,16 +57,18 @@ Scripts may be run locally or from a central server share (e.g. `\\POS-FS01\Repo
 ## 🧪 How to Run  
 
 1. **Open PowerShell ISE** (as an instructor or student).  
-2. Run each script in order:  
-   ```powershell
+2. Run each script in order:
+ 
+```bash
 01_Build-MockFiscalEnvironment.ps1
 02_OS_FiscalYear_FuzzyNames.ps1
 03_OS_FiscalYear_FuzzyAndSpecial.ps1
 04_OS_FiscalYear_DailyReport_UnifiedScan.ps1
-3. Watch PowerShell color-coded output and Excel open with your audit summary!
+```
 
-### 🎓 Teaching Notes
+## 🎓 Teaching Notes
 
+Watch PowerShell color-coded output and Excel open with your audit summary!
 > The fiscal year folder path is hard-coded in beginner scripts for clarity (I:\FY2025-2026).
 
 > Later versions will use param() blocks and validation for professional-grade flexibility.
