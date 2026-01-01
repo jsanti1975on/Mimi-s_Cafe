@@ -17,8 +17,8 @@
 ```bash
 dubz@dubzPi:/opt/cyber-dash $ tree
 .
-├── assets
-│   └── tux-speech.txt
+├
+│
 ├── cheats
 │   ├── css
 │   │   ├── style.css
