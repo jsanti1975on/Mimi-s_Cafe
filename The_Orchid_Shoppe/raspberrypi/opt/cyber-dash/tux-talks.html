@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DNS Host Map!</title>
+  <style>
+    body {
+      background: black;
+      color: #00FF00;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      height: 100vh;
+      margin: 0;
+      padding: 40px;
+    }
+
+    /*** [SPACING: 4] */
+    #title {
+      font-size: 2.5em;
+      text-align: center;
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /*** [SPACING: 4] */
+    #ascii {
+      white-space: pre;
+      font-size: 21px;
+      line-height: 1.3;
+      text-align: left;
+      margin-top: 40px;
+      display: none;
+    }
+
+    /*** [SPACING: 4] */
+    #speech {
+      color: cyan;
+      font-style: italic;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.1em;
+      min-height: 60px;
+      display: none;
+    }
+
+    /*** [SPACING: 4] */
+    #effectButtons {
+      display: none;
+      margin-top: 30px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /*** [SPACING: 4] */
+    .btn {
+      padding: 10px 20px;
+      background: #111;
+      color: #0f0;
+      border: 1px solid #0f0;
+      cursor: pointer;
+      transform: scale(3);
+      transition: transform 0.6s ease-in-out;
+    }
+
+    /*** [SPACING: 4] */
+    .btn.show {
+      transform: scale(1);
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- [SPACING: 2] -->
+  <div id="title">Below are the buttons to link to host on the 10.10.10.0/24 Network!</div>
+  <div id="ascii"></div>
+  <div id="speech"></div>
+
+<!-- [SPACING: 2] -->
+  <div id="effectButtons">
+    <button class="btn" id="restartBtn" style="display: none; margin-top: 20px;">Restart Animation</button>
+    <button class="btn">protectli.dubz-vault.corp</button>
+    <button class="btn">esxi-serv.dubz-vault.corp</button>
+    <button class="btn">esxi-sec.dubz-vault.corp</button>
+    <button class="btn">Pi-hole</button>
+    <button class="btn">poweredge.dubz-vault.corp</button>
+    <button class="btn">IoT - dashboard</button>
+    <button class="btn">OWASP-DVWA</button>
+    <button class="btn">unused</button>
+    <button class="btn">unused</button>
+  </div>
+
+<!-- [SPACING: 2] -->
+  <script>
+    const title = document.getElementById('title');
+    let blinkCount = 0;
+
+///|js Four Space Marker
+    function blinkTitle() {
+      if (blinkCount >= 6) {
+        title.style.opacity = 1;
+        startTuxIntro();
+        return;
+      }
+
+/////| js Six Space Marker
+      title.style.opacity = (title.style.opacity == 0 ? 1 : 0);
+      blinkCount++;
+      setTimeout(blinkTitle, 300);
+    }
+
+///|js Four Space Marker
+    const frames = [
+`      .--.
+     |o_o |
+     |:_/ |
+    //   \\ \\
+   (|     | )
+  /'\\_   _/\\\`
+  \\___)=(___/`,
+
+`      .--.
+     |x_x |
+     |:_/ |
+    //   \\ \\
+   (|     | )
+  /'\\_   _/\\\`
+  \\___)=(___/`,
+
+`      .--.
+     |^_^ |
+     |:_/ |
+    //   \\ \\
+   (|     | )
+  /'\\_   _/\\\`
+  \\___)=(___/`
+    ];
+
+///|js Four Space Marker
+    const speechLines = [
+      "Today we start with the Start Of Authority config.",
+      "These buttons will link over to each host!",
+      "A user name and password are needed!",
+      "This file will be a dashboard!",
+      "My assistant dubz will now demonstrait!"
+    ];
+
+///|js Four Space Marker
+    let frameIndex = 0;
+    let speechIndex = 0;
+    let animationInterval;
+
+///|js Four Space Marker | Hostname → IP map / use small independent machine for dvwa
+    const hostMap = {
+      "protectli.dubz-vault.corp": "http://10.10.10.1",
+      "esxi-serv.dubz-vault.corp": "http://10.10.10.13",
+      "esxi-sec.dubz-vault.corp": "http://10.10.10.19",
+      "Pi-hole": "http://10.10.10.30/admin/#",
+      "poweredge.dubz-vault.corp": "http://10.10.10.55",
+      "IoT - dashboard": "http://10.10.10.20:8000/",
+      "OWASP-DVWA": "http://10.10.10.20/dvwa/login.php"
+    };
+
+///|js Four Space Marker
+    function startTuxIntro() {
+      document.getElementById('ascii').style.display = 'block';
+      document.getElementById('speech').style.display = 'block';
+
+      animationInterval = setInterval(() => {
+        document.getElementById('ascii').textContent = frames[frameIndex];
+        frameIndex = (frameIndex + 1) % frames.length;
+      }, 600);
+
+      showSpeechLine();
+    }
+
+///|js Four Space Marker
+    function showSpeechLine() {
+      const speechEl = document.getElementById('speech');
+      speechEl.textContent = speechLines[speechIndex];
+
+      speechIndex++;
+      if (speechIndex < speechLines.length) {
+        setTimeout(showSpeechLine, 5000);
+      } else {
+        setTimeout(() => {
+          clearInterval(animationInterval);
+          showButtons();
+        }, 3000);
+      }
+    }
+
+///|js Four Space Marker
+    function showButtons() {
+      const container = document.getElementById('effectButtons');
+      container.style.display = 'flex';
+
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        const host = btn.innerText.trim();
+        if (hostMap[host]) {
+          btn.onclick = () => window.open(hostMap[host], "_blank");
+        } else {
+          btn.onclick = () => alert("No mapping available for this button.");
+        }
+      });
+
+/////| js Six Space Marker
+      setTimeout(() => {
+        buttons.forEach(btn => btn.classList.add('show'));
+      }, 100);
+
+      document.getElementById('restartBtn').style.display = 'inline-block';
+    }
+
+///|js Four Space Marker
+    document.getElementById('restartBtn').addEventListener('click', restartAnimation);
+
+///|js Four Space Marker
+    function restartAnimation() {
+      clearInterval(animationInterval);
+      blinkCount = 0;
+      frameIndex = 0;
+      speechIndex = 0;
+      document.getElementById('ascii').style.display = 'none';
+      document.getElementById('speech').style.display = 'none';
+      document.getElementById('effectButtons').style.display = 'none';
+      document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('show'));
+      blinkTitle();
+    }
+
+///|js Four Space Marker
+    blinkTitle();
+  </script>
+
+<!-- [SPACING: 2] -->
+</body>
+</html>
