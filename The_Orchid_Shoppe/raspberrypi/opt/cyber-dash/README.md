@@ -11,7 +11,7 @@
 - Pi-hole Dashboard (Logs,Charts,Settings)
 - vSphere Host
 - coming: virtual machine (e.g. Attacker Machine)
-- unused buttons
+- Later link to new headless RHEL10 codebase server (e.g. console using http)
 
 ## East Side Server: directory
 ```bash
