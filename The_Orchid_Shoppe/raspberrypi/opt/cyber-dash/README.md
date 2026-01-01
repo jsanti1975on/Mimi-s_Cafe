@@ -1,5 +1,5 @@
 # User workstation launches cyber dash with launcher .exe file (Windows POS station)
-- The kioske styl .exe opens the http dashboard
+- The kioske style .exe opens the http dashboard
 - User can upload a file (jumpbox/sinkhole/vulnerable web app)
 - User can browse uploads 
 - User can select button Tux Talks (Links to vSphere Host,DVWA,IoT Dashboard
