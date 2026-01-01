@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Home Lab Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- I finished writing this 11-08-2025 - After that had Claude clean it up.-->
+  <!-- Claude understands its for a home lab training range -->
+  <!-- Main Project Header: This dashboard is designed for cybersecurity learning -->
+  <h1>Welcome to my Cyber-Lab Dashboard</h1>
+
+  <!-- Authentication Challenge Section: Simple client-side authentication demo -->
+  <h3>[Authentication Challenge] Which button proceeds?</h3>
+  <button class="option-button" onclick="checkAnswer(true)">_(underscore)</button>
+  <button class="option-button" onclick="checkAnswer(false)">JavaScript</button>
+  <button class="option-button" onclick="checkAnswer(false)">CSS</button>
+  <p id="result"></p>
+
+  <!-- Navigation Section: Hidden until authentication challenge is completed -->
+  <div id="nav-links" style="display:none; margin-top:30px;">
+    <!-- File Upload Section: Demonstrates basic file handling -->
+    <h3>Upload a File</h3>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" required>
+      <button type="submit">Uploads</button>
+    </form>
+    <!-- File Directory Note -->
+    <!--|The uploads dir lives inside the same directory as index.html|-->
+    <!--|Later add the python logic to move uploaded files.|-->
+    
+    <!-- File Browser Section -->
+    <h3>Shared Files</h3>
+    <p><a href="/uploads/">Browse uploads here</a></p>
+
+    <!-- Linux System Access Section -->
+    <h3> Infrastructure Access </h3>
+    <a href="tux-talks.html">
+      <button class="nav-button">Tux Talks</button>
+    </a>
+
+    <!-- CTF Learning Resources Section -->
+    <h3>CTF Cheats</h3>
+    <a href="cheats/index.html" target="_blank">
+      <button class="nav-button">Open Cheat Dashboard</button>
+    </a>
+  </div>
+
+  <!-- Client-side Authentication Logic -->
+  <script>
+    function checkAnswer(isCorrect) {
+      const result = document.getElementById("result");
+      const navLinks = document.getElementById("nav-links");
+
+      if (isCorrect) {
+        result.innerHTML = "Correct! Dashboard unlocked.";
+        result.style.color ="";
+        navLinks.style.display = "block";
+      } else {
+        result.innerHTML = "Incorrect. Try again!";
+        result.style.color = "red"; // Set text color to red for wrong answer
+      }
+    }
+  </script>
+</body>
+</html>
