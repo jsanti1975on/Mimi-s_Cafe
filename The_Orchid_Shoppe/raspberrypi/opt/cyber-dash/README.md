@@ -15,10 +15,10 @@
 
 ## East Side Server: directory
 ```bash
-dubz@dubzPi:/opt/cyber-dash $ tree
-.
-├
-│
+/opt/cyber-dash $ tree
+|---- Rag_Text/ <---- Start with only .txt files
+|
+│   
 ├── cheats
 │   ├── css
 │   │   ├── style.css
@@ -51,18 +51,10 @@ dubz@dubzPi:/opt/cyber-dash $ tree
 │   │   ├── john.txt
 │   │   ├── links.txt
 │   │   └── nmap.txt
-│   └── uploads
-├── files
-│   ├── ...
-│   ├── ...
-│   ├── ...
-│   ├── ...
-│   ├── ...
-│   ├── ...
-│   ├── ... 
-│   ├── ...
-│   ├── ...
-│   └── ...
+│   └── uploads/
+├── files/
+│   
+│   
 ├── index.html
 ├── LOG_FILE
 ├── scripts
@@ -70,9 +62,7 @@ dubz@dubzPi:/opt/cyber-dash $ tree
 │   └── start-dashboard.sh
 ├── style.css
 ├── tux-talks.html
-├── uploads
-│  |_
-└── uploads_old/
+├── uploads/
 
 ```
 
