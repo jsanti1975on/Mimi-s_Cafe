@@ -1,119 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>DNS Host Map!</title>
-  <style>
-    body {
-      background: black;
-      color: #00FF00;
-      font-family: monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      height: 100vh;
-      margin: 0;
-      padding: 40px;
-    }
+<meta charset="UTF-8">
+<title>DNS Host Map!</title>
 
-    /*** [SPACING: 4] */
-    #title {
-      font-size: 2.5em;
-      text-align: center;
-      opacity: 1;
-      transition: opacity 0.3s ease-in-out;
-    }
+<style>
+body {
+  background: black;
+  color: #00FF00;
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 40px;
+}
 
-    /*** [SPACING: 4] */
-    #ascii {
-      white-space: pre;
-      font-size: 21px;
-      line-height: 1.3;
-      text-align: left;
-      margin-top: 40px;
-      display: none;
-    }
+#title {
+  font-size: 2.5em;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
 
-    /*** [SPACING: 4] */
-    #speech {
-      color: cyan;
-      font-style: italic;
-      margin-top: 20px;
-      text-align: center;
-      font-size: 1.1em;
-      min-height: 60px;
-      display: none;
-    }
+#ascii {
+  white-space: pre;
+  font-size: 21px;
+  line-height: 1.3;
+  margin-top: 40px;
+  display: none;
+}
 
-    /*** [SPACING: 4] */
-    #effectButtons {
-      display: none;
-      margin-top: 30px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+#speech {
+  color: cyan;
+  font-style: italic;
+  margin-top: 20px;
+  min-height: 60px;
+  display: none;
+}
 
-    /*** [SPACING: 4] */
-    .btn {
-      padding: 10px 20px;
-      background: #111;
-      color: #0f0;
-      border: 1px solid #0f0;
-      cursor: pointer;
-      transform: scale(3);
-      transition: transform 0.6s ease-in-out;
-    }
+#effectButtons {
+  display: none;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
 
-    /*** [SPACING: 4] */
-    .btn.show {
-      transform: scale(1);
-    }
-  </style>
+.btn {
+  padding: 10px 20px;
+  background: #111;
+  color: #0f0;
+  border: 1px solid #0f0;
+  cursor: pointer;
+  transform: scale(3);
+  transition: transform 0.6s ease-in-out;
+}
+
+.btn.show {
+  transform: scale(1);
+}
+</style>
 </head>
 
 <body>
 
-<!-- [SPACING: 2] -->
-  <div id="title">Below are the buttons to link to host on the 10.10.10.0/24 Network!</div>
-  <div id="ascii"></div>
-  <div id="speech"></div>
+<div id="title">
+  Below are the buttons to link to host on the 0.0.0.0/24 Network!
+</div>
 
-<!-- [SPACING: 2] -->
-  <div id="effectButtons">
-    <button class="btn" id="restartBtn" style="display: none; margin-top: 20px;">Restart Animation</button>
-    <button class="btn">protectli.dubz-vault.corp</button>
-    <button class="btn">esxi-serv.dubz-vault.corp</button>
-    <button class="btn">esxi-sec.dubz-vault.corp</button>
-    <button class="btn">Pi-hole</button>
-    <button class="btn">poweredge.dubz-vault.corp</button>
-    <button class="btn">IoT - dashboard</button>
-    <button class="btn">OWASP-DVWA</button>
-    <button class="btn">unused</button>
-    <button class="btn">unused</button>
-  </div>
+<div id="ascii"></div>
+<div id="speech"></div>
 
-<!-- [SPACING: 2] -->
-  <script>
-    const title = document.getElementById('title');
-    let blinkCount = 0;
+<div id="effectButtons">
+  <button class="btn" id="restartBtn">Restart Animation</button>
+  <button class="btn">host0.FQDN</button>
+  <button class="btn">host1.FQDN</button>
+  <button class="btn">host2.FQDN</button>
+  <button class="btn">host3.FQDN</button>
+  <button class="btn">host4.FQDN</button>
+  <button class="btn">host5.FQDN</button>
+  <button class="btn">host6.FQDN</button>
+  <button class="btn">unused1</button>
+  <button class="btn">unused2</button>
+  <button class="btn">unused3</button>
+</div>
 
-///|js Four Space Marker
-    function blinkTitle() {
-      if (blinkCount >= 6) {
-        title.style.opacity = 1;
-        startTuxIntro();
-        return;
-      }
+<script>
+/* ===== LOOP CONFIG ===== */
+const LOOP_ENABLED = true;
+const LOOP_DELAY_MS = 25000;
+const FRAME_INTERVAL_MS = 600;
+const SPEECH_INTERVAL_MS = 5000;
+const TITLE_BLINK_MS = 300;
+/* ======================= */
 
-/////| js Six Space Marker
-      title.style.opacity = (title.style.opacity == 0 ? 1 : 0);
-      blinkCount++;
-      setTimeout(blinkTitle, 300);
-    }
+const title = document.getElementById('title');
+const ascii = document.getElementById('ascii');
+const speech = document.getElementById('speech');
+const buttonsContainer = document.getElementById('effectButtons');
+const restartBtn = document.getElementById('restartBtn');
 
-///|js Four Space Marker
-    const frames = [
+let blinkCount = 0;
+let frameIndex = 0;
+let speechIndex = 0;
+let animationInterval;
+
+/* ===== TITLE BLINK ===== */
+function blinkTitle() {
+  if (blinkCount >= 6) {
+    title.style.opacity = 1;
+    startTuxIntro();
+    return;
+  }
+  title.style.opacity = title.style.opacity == 0 ? 1 : 0;
+  blinkCount++;
+  setTimeout(blinkTitle, TITLE_BLINK_MS);
+}
+
+/* ===== ASCII FRAMES ===== */
+const frames = [
 `      .--.
      |o_o |
      |:_/ |
@@ -137,105 +144,91 @@
    (|     | )
   /'\\_   _/\\\`
   \\___)=(___/`
-    ];
+];
 
-///|js Four Space Marker
-    const speechLines = [
-      "Today we start with the Start Of Authority config.",
-      "These buttons will link over to each host!",
-      "A user name and password are needed!",
-      "This file will be a dashboard!",
-      "My assistant dubz will now demonstrait!"
-    ];
+const speechLines = [
+  "Today we start with the Start Of Authority config.",
+  "These buttons link to each host.",
+  "Authentication is required.",
+  "This file acts as a live dashboard.",
+  "Remember: do not forget the hack."
+];
 
-///|js Four Space Marker
-    let frameIndex = 0;
-    let speechIndex = 0;
-    let animationInterval;
+/* ===== HOST MAP ===== */
+const hostMap = {
+  "host0.FQDN": "https://google.com",
+  "host1.FQDN": "https://outlook.com",
+  "host2.FQDN": "https://facebook.com",
+  "host3.FQDN": "https://youtube.com",
+  "host4.FQDN": "http://0.0.0.0",
+  "host5.FQDN": "http://0.0.0.0",
+  "host6.FQDN": "http://0.0.0.0",
+  "unused1": "http://0.0.0.0",
+  "unused2": "http://0.0.0.0",
+  "unused3": "http://0.0.0.0"
+};
 
-///|js Four Space Marker | Hostname → IP map / use small independent machine for dvwa
-    const hostMap = {
-      "protectli.dubz-vault.corp": "http://10.10.10.1",
-      "esxi-serv.dubz-vault.corp": "http://10.10.10.13",
-      "esxi-sec.dubz-vault.corp": "http://10.10.10.19",
-      "Pi-hole": "http://10.10.10.30/admin/#",
-      "poweredge.dubz-vault.corp": "http://10.10.10.55",
-      "IoT - dashboard": "http://10.10.10.20:8000/",
-      "OWASP-DVWA": "http://10.10.10.20/dvwa/login.php"
-    };
+/* ===== INTRO ===== */
+function startTuxIntro() {
+  ascii.style.display = 'block';
+  speech.style.display = 'block';
 
-///|js Four Space Marker
-    function startTuxIntro() {
-      document.getElementById('ascii').style.display = 'block';
-      document.getElementById('speech').style.display = 'block';
+  animationInterval = setInterval(() => {
+    ascii.textContent = frames[frameIndex];
+    frameIndex = (frameIndex + 1) % frames.length;
+  }, FRAME_INTERVAL_MS);
 
-      animationInterval = setInterval(() => {
-        document.getElementById('ascii').textContent = frames[frameIndex];
-        frameIndex = (frameIndex + 1) % frames.length;
-      }, 600);
+  showSpeechLine();
+}
 
-      showSpeechLine();
-    }
-
-///|js Four Space Marker
-    function showSpeechLine() {
-      const speechEl = document.getElementById('speech');
-      speechEl.textContent = speechLines[speechIndex];
-
-      speechIndex++;
-      if (speechIndex < speechLines.length) {
-        setTimeout(showSpeechLine, 5000);
-      } else {
-        setTimeout(() => {
-          clearInterval(animationInterval);
-          showButtons();
-        }, 3000);
-      }
-    }
-
-///|js Four Space Marker
-    function showButtons() {
-      const container = document.getElementById('effectButtons');
-      container.style.display = 'flex';
-
-      const buttons = document.querySelectorAll('.btn');
-      buttons.forEach(btn => {
-        const host = btn.innerText.trim();
-        if (hostMap[host]) {
-          btn.onclick = () => window.open(hostMap[host], "_blank");
-        } else {
-          btn.onclick = () => alert("No mapping available for this button.");
-        }
-      });
-
-/////| js Six Space Marker
-      setTimeout(() => {
-        buttons.forEach(btn => btn.classList.add('show'));
-      }, 100);
-
-      document.getElementById('restartBtn').style.display = 'inline-block';
-    }
-
-///|js Four Space Marker
-    document.getElementById('restartBtn').addEventListener('click', restartAnimation);
-
-///|js Four Space Marker
-    function restartAnimation() {
+/* ===== SPEECH ===== */
+function showSpeechLine() {
+  speech.textContent = speechLines[speechIndex++];
+  if (speechIndex < speechLines.length) {
+    setTimeout(showSpeechLine, SPEECH_INTERVAL_MS);
+  } else {
+    setTimeout(() => {
       clearInterval(animationInterval);
-      blinkCount = 0;
-      frameIndex = 0;
-      speechIndex = 0;
-      document.getElementById('ascii').style.display = 'none';
-      document.getElementById('speech').style.display = 'none';
-      document.getElementById('effectButtons').style.display = 'none';
-      document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('show'));
-      blinkTitle();
+      showButtons();
+      scheduleNextLoop();
+    }, 3000);
+  }
+}
+
+/* ===== BUTTONS ===== */
+function showButtons() {
+  buttonsContainer.style.display = 'flex';
+
+  document.querySelectorAll('.btn').forEach(btn => {
+    const host = btn.innerText.trim();
+    if (hostMap[host]) {
+      btn.onclick = () => window.open(hostMap[host], "_blank");
     }
+    btn.classList.add('show');
+  });
+}
 
-///|js Four Space Marker
-    blinkTitle();
-  </script>
+/* ===== LOOP ===== */
+function scheduleNextLoop() {
+  if (!LOOP_ENABLED) return;
+  setTimeout(restartAnimation, LOOP_DELAY_MS);
+}
 
-<!-- [SPACING: 2] -->
+/* ===== RESET ===== */
+function restartAnimation() {
+  clearInterval(animationInterval);
+  blinkCount = frameIndex = speechIndex = 0;
+  ascii.style.display = 'none';
+  speech.style.display = 'none';
+  buttonsContainer.style.display = 'none';
+  document.querySelectorAll('.btn').forEach(b => b.classList.remove('show'));
+  blinkTitle();
+}
+
+/* ===== INIT ===== */
+restartBtn.onclick = restartAnimation;
+blinkTitle();
+</script>
+
 </body>
 </html>
