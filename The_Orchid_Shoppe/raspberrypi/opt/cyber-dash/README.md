@@ -1,33 +1,24 @@
 # Cyber-Dash Ecosystem  
 **Portfolio Project | Cyber Range | Kiosk-Based Learning Environment**
 
-This repository documents the design, implementation, and roadmap of a **Windows-based kiosk launcher and multi-dashboard cyber range**, built for cybersecurity education, demonstrations, and portfolio presentation.
+This repository documents the design, implementation, and roadmap of a **Windows-based kiosk launcher and multi-dashboard cyber range**, built for cybersecurity education, ethical hacking assessments, and portfolio presentation.
 
-The project focuses on:
-- Secure workstation design (POS / kiosk model)
-- Web-based dashboards for lab navigation
-- Offensive & defensive security tooling
-- Virtualization, networking, and PKI
-- Clear separation of **East / West lab environments**
+The project intentionally blends **modern security tooling** with **legacy Windows domain environments** to simulate real-world enterprise and government infrastructures commonly encountered during penetration tests and final exam assessments.
 
 ---
 
 ## 🚀 Project Overview
 
 A **Windows workstation** launches a hardened `.exe` kiosk application that opens a **central HTTP dashboard**.  
-From this dashboard, users can navigate to various cyber range services such as:
+From this dashboard, users can navigate to a controlled cyber range containing:
 
-- Vulnerable web applications
-- IoT dashboards
-- DNS sinkhole & monitoring tools
-- Virtual machines (attacker & server)
-- Cheat sheets and guided learning tools
+- Vulnerable legacy systems
+- Modern servers and dashboards
+- Offensive and defensive tooling
+- IoT and monitoring environments
+- Certificate-based trust boundaries
 
-The environment is intentionally modular to support:
-- Classroom use
-- Self-paced labs
-- Demonstrations
-- YouTube documentation
+This environment is explicitly designed to resemble **ethical hacking final exam assessments**, where legacy systems coexist with newer infrastructure and misconfigurations must be identified, exploited, and documented.
 
 ---
 
@@ -53,7 +44,7 @@ The environment is intentionally modular to support:
     - IoT Dashboard
 - **Cheats Dashboard**
   - Web UI
-  - Common security tools
+  - Common ethical hacking tools
   - Base64 challenge (intro CTF mechanic)
 
 ---
@@ -81,6 +72,37 @@ Acts as the **central navigation point** for the cyber range.
 
 ---
 
+## 🏢 Legacy Windows Domain Environment (Planned)
+
+To accurately reflect **real-world ethical hacking assessments**, this cyber range includes a **mixed-generation Windows domain**.
+
+### Planned Domain Systems
+- **Windows Small Business Server 2008**
+  - Legacy Domain Controller
+  - Outdated authentication mechanisms
+  - Common misconfigurations used in exams
+- **Windows Server 2019**
+  - Configured as a **Read-Only Domain Controller (RODC)**
+  - Used to demonstrate:
+    - Credential caching risks
+    - Physical site compromise scenarios
+- **Windows 8**
+  - Legacy domain-joined workstation
+  - Weak endpoint protections
+- **Windows 10**
+  - Mixed hardening levels
+  - Used for comparison against legacy hosts
+
+### Purpose
+This environment mirrors **Ethical Hacking Final Exam assessments**, where candidates must:
+- Enumerate legacy Active Directory environments
+- Identify outdated protocols and services
+- Exploit weak authentication and trust relationships
+- Pivot between legacy and modern systems
+- Demonstrate post-exploitation awareness
+
+---
+
 ## 🧠 East Side Server (IoT Subnet)
 
 ### Directory Structure
@@ -96,24 +118,7 @@ Acts as the **central navigation point** for the cyber range.
 │   ├── scripts/
 │   │   └── server.py
 │   ├── tools/
-│   │   ├── dirsearch.html
-│   │   ├── ffuf.html
-│   │   ├── gobuster.html
-│   │   ├── hashcat.html
-│   │   ├── hydra.html
-│   │   ├── john.html
-│   │   ├── links.html
-│   │   ├── nmap.html
-│   │   └── sandbox.html
 │   ├── txt/
-│   │   ├── dirsearch.txt
-│   │   ├── ffuf.txt
-│   │   ├── gobuster.txt
-│   │   ├── hashcat.txt
-│   │   ├── hydra.txt
-│   │   ├── john.txt
-│   │   ├── links.txt
-│   │   └── nmap.txt
 │   └── uploads/
 ├── files/
 ├── index.html
