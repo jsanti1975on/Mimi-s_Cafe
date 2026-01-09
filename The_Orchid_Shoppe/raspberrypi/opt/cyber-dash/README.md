@@ -127,6 +127,10 @@ Acts as the **central navigation point** for the cyber range.
 ```
 
 ### Plans
+Cisco Legacy switches and root bridge priority soloweras ect...
+
+
+
 ## 🏢 Legacy Windows Domain Environment (Planned)
 
 To accurately reflect **real-world ethical hacking assessments**, this cyber range includes a **mixed-generation Windows domain**.
