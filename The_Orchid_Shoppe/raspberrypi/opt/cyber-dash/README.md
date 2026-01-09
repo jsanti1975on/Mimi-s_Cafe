@@ -1,24 +1,33 @@
 # Cyber-Dash Ecosystem  
 **Portfolio Project | Cyber Range | Kiosk-Based Learning Environment**
 
-This repository documents the design, implementation, and roadmap of a **Windows-based kiosk launcher and multi-dashboard cyber range**, built for cybersecurity education, ethical hacking assessments, and portfolio presentation.
+This repository documents the design, implementation, and roadmap of a **Windows-based kiosk launcher and multi-dashboard cyber range**, built for cybersecurity education, demonstrations, and portfolio presentation.
 
-The project intentionally blends **modern security tooling** with **legacy Windows domain environments** to simulate real-world enterprise and government infrastructures commonly encountered during penetration tests and final exam assessments.
+The project focuses on:
+- Secure workstation design (POS / kiosk model)
+- Web-based dashboards for lab navigation
+- Offensive & defensive security tooling
+- Virtualization, networking, and PKI
+- Clear separation of **East / West lab environments**
 
 ---
 
 ## 🚀 Project Overview
 
 A **Windows workstation** launches a hardened `.exe` kiosk application that opens a **central HTTP dashboard**.  
-From this dashboard, users can navigate to a controlled cyber range containing:
+From this dashboard, users can navigate to various cyber range services such as:
 
-- Vulnerable legacy systems
-- Modern servers and dashboards
-- Offensive and defensive tooling
-- IoT and monitoring environments
-- Certificate-based trust boundaries
+- Vulnerable web applications
+- IoT dashboards
+- DNS sinkhole & monitoring tools
+- Virtual machines (attacker & server)
+- Cheat sheets and guided learning tools
 
-This environment is explicitly designed to resemble **ethical hacking final exam assessments**, where legacy systems coexist with newer infrastructure and misconfigurations must be identified, exploited, and documented.
+The environment is intentionally modular to support:
+- Classroom use
+- Self-paced labs
+- Demonstrations
+- YouTube documentation
 
 ---
 
@@ -44,7 +53,7 @@ This environment is explicitly designed to resemble **ethical hacking final exam
     - IoT Dashboard
 - **Cheats Dashboard**
   - Web UI
-  - Common ethical hacking tools
+  - Common security tools
   - Base64 challenge (intro CTF mechanic)
 
 ---
@@ -72,6 +81,52 @@ Acts as the **central navigation point** for the cyber range.
 
 ---
 
+## 🧠 East Side Server (IoT Subnet)
+
+### Directory Structure
+
+```bash
+/opt/cyber-dash
+├── Rag_Text/                 # Start with .txt files only (RAG-safe)
+├── cheats/
+│   ├── css/
+│   ├── data/
+│   │   └── tools.json
+│   ├── js/
+│   ├── scripts/
+│   │   └── server.py
+│   ├── tools/
+│   │   ├── dirsearch.html
+│   │   ├── ffuf.html
+│   │   ├── gobuster.html
+│   │   ├── hashcat.html
+│   │   ├── hydra.html
+│   │   ├── john.html
+│   │   ├── links.html
+│   │   ├── nmap.html
+│   │   └── sandbox.html
+│   ├── txt/
+│   │   ├── dirsearch.txt
+│   │   ├── ffuf.txt
+│   │   ├── gobuster.txt
+│   │   ├── hashcat.txt
+│   │   ├── hydra.txt
+│   │   ├── john.txt
+│   │   ├── links.txt
+│   │   └── nmap.txt
+│   └── uploads/
+├── files/
+├── index.html
+├── LOG_FILE
+├── scripts/
+│   ├── server.py
+│   └── start-dashboard.sh
+├── style.css
+├── tux-talks.html
+└── uploads/
+```
+
+### Plans
 ## 🏢 Legacy Windows Domain Environment (Planned)
 
 To accurately reflect **real-world ethical hacking assessments**, this cyber range includes a **mixed-generation Windows domain**.
@@ -102,30 +157,3 @@ This environment mirrors **Ethical Hacking Final Exam assessments**, where candi
 - Demonstrate post-exploitation awareness
 
 ---
-
-## 🧠 East Side Server (IoT Subnet)
-
-### Directory Structure
-
-```bash
-/opt/cyber-dash
-├── Rag_Text/                 # Start with .txt files only (RAG-safe)
-├── cheats/
-│   ├── css/
-│   ├── data/
-│   │   └── tools.json
-│   ├── js/
-│   ├── scripts/
-│   │   └── server.py
-│   ├── tools/
-│   ├── txt/
-│   └── uploads/
-├── files/
-├── index.html
-├── LOG_FILE
-├── scripts/
-│   ├── server.py
-│   └── start-dashboard.sh
-├── style.css
-├── tux-talks.html
-└── uploads/
