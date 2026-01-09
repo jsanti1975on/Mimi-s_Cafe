@@ -1,38 +1,101 @@
-# User workstation launches cyber dash with launcher .exe file (Windows POS station)
-- The kioske style .exe opens the http dashboard
-- User can upload a file (jumpbox/sinkhole/vulnerable web app)
-- User can browse uploads 
-- User can select button Tux Talks (Links to vSphere Host,DVWA,IoT Dashboard
-- User can Open Cheats dashboard (web ui with common tools. Base64 challenge)
+# Cyber-Dash Ecosystem  
+**Portfolio Project | Cyber Range | Kiosk-Based Learning Environment**
 
-# From http dashboard move to one below
-- East Side Server: 2nd http dashboard (IoT Subnet) <= Move to vlan...
-- OWASP (DVWA)
-- Pi-hole Dashboard (Logs,Charts,Settings)
+This repository documents the design, implementation, and roadmap of a **Windows-based kiosk launcher and multi-dashboard cyber range**, built for cybersecurity education, demonstrations, and portfolio presentation.
+
+The project focuses on:
+- Secure workstation design (POS / kiosk model)
+- Web-based dashboards for lab navigation
+- Offensive & defensive security tooling
+- Virtualization, networking, and PKI
+- Clear separation of **East / West lab environments**
+
+---
+
+## 🚀 Project Overview
+
+A **Windows workstation** launches a hardened `.exe` kiosk application that opens a **central HTTP dashboard**.  
+From this dashboard, users can navigate to various cyber range services such as:
+
+- Vulnerable web applications
+- IoT dashboards
+- DNS sinkhole & monitoring tools
+- Virtual machines (attacker & server)
+- Cheat sheets and guided learning tools
+
+The environment is intentionally modular to support:
+- Classroom use
+- Self-paced labs
+- Demonstrations
+- YouTube documentation
+
+---
+
+## 🖥️ Windows POS → Cyber-Dash Launcher
+
+### Features
+- Kiosk-style `.exe` launcher
+- Opens the primary HTTP dashboard
+- No PowerShell or batch scripts required
+- Controlled via `.env` configuration file
+- Fullscreen / restricted user experience
+
+### Dashboard Capabilities
+- Upload files:
+  - Jumpbox payloads
+  - Sinkhole samples
+  - Vulnerable web app files
+- Browse uploaded files
+- **Tux Talks**
+  - Links to:
+    - vSphere Host
+    - DVWA
+    - IoT Dashboard
+- **Cheats Dashboard**
+  - Web UI
+  - Common security tools
+  - Base64 challenge (intro CTF mechanic)
+
+---
+
+## 🌐 Primary HTTP Dashboard (Core Hub)
+
+Acts as the **central navigation point** for the cyber range.
+
+### Linked Services
+- East Side Server (IoT Subnet Dashboard)
+- OWASP DVWA
+- Pi-hole Dashboard
+  - Logs
+  - Charts
+  - Settings
 - vSphere Host
-- coming: virtual machine (e.g. Attacker Machine)
-- Later link to new headless RHEL10 codebase server (e.g. console using http)
+- Coming Soon:
+  - Attacker VM (browser-accessible)
+  - Headless RHEL10 console via HTTP
 
-## East Side Server: directory
+### Security Model
+- Read-only access from POS subnet
+- Admin dashboards restricted via VLAN + certificates
+- Designed to demonstrate **defense-in-depth**
+
+---
+
+## 🧠 East Side Server (IoT Subnet)
+
+### Directory Structure
+
 ```bash
-/opt/cyber-dash $ tree
-|---- Rag_Text/ <---- Start with only .txt files
-|
-│   
-├── cheats
-│   ├── css
-│   │   ├── style.css
-│   │   └── Update-Me
-│   ├── dash.js
-│   ├── data
+/opt/cyber-dash
+├── Rag_Text/                 # Start with .txt files only (RAG-safe)
+├── cheats/
+│   ├── css/
+│   ├── data/
 │   │   └── tools.json
-│   ├── index.html
-│   ├── js
-│   │   └── cheats.js
-│   ├── scripts
+│   ├── js/
+│   ├── scripts/
 │   │   └── server.py
-│   ├── style.css
-│   ├── tools
+│   ├── tools/
 │   │   ├── dirsearch.html
 │   │   ├── ffuf.html
 │   │   ├── gobuster.html
@@ -42,7 +105,7 @@
 │   │   ├── links.html
 │   │   ├── nmap.html
 │   │   └── sandbox.html
-│   ├── txt
+│   ├── txt/
 │   │   ├── dirsearch.txt
 │   │   ├── ffuf.txt
 │   │   ├── gobuster.txt
@@ -53,19 +116,11 @@
 │   │   └── nmap.txt
 │   └── uploads/
 ├── files/
-│   
-│   
 ├── index.html
 ├── LOG_FILE
-├── scripts
+├── scripts/
 │   ├── server.py
 │   └── start-dashboard.sh
 ├── style.css
 ├── tux-talks.html
-├── uploads/
-
-```
-
-### To Do
-- Cont. Active Directory GPO settings
-- 
+└── uploads/
