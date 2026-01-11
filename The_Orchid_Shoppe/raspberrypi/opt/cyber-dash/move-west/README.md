@@ -29,7 +29,16 @@ Moving West Side assets into this project:
 - DHCP configuration
   - No reservation for esxi-client at this time
 
-# Code to write below
+ # Directory Tree & screenshots
+<img width="669" height="660" alt="rm-file" src="https://github.com/user-attachments/assets/47579395-8976-4cc3-b6e0-539d920281de" />
+
+<img width="1934" height="1094" alt="rm-file1" src="https://github.com/user-attachments/assets/8cdb8e96-3043-48ee-ae3b-ffd730a5a0e7" />
+
+<img width="921" height="909" alt="rm-file2" src="https://github.com/user-attachments/assets/054a55db-d4dd-4d10-9067-b666209fa2e4" />
+
+<img width="1237" height="664" alt="rm-file3" src="https://github.com/user-attachments/assets/e4d0934a-3e6d-4af0-a86f-097392d71807" />
+
+# Code to write below {^_^}LOOKFLAG=> Use the logo version not THM
 ```html
 <!DOCTYPE html>
 <html lang="en">
