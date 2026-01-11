@@ -4,7 +4,7 @@
 - AI conversations
 
 ## 01-11-2026 | Notes related to dns and rasp pi
-# DNS Change Control — Secondary DNS / Sinkhole Node (dubzPi)
+# DNS Change Control — Secondary DNS / Sinkhole Node (redacted)
 
 ## Device Role
 - **Hostname:** redacted
