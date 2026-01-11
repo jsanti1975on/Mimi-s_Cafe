@@ -1,24 +1,30 @@
 # Cyber_Associate_West
-- ftkzgc8qr8-beep
 
-## Moving West Side files here
+**Practice GitHub account:** ftkzgc8qr8-beep
+
+## File Migration (West Side)
+Moving West Side assets into this project:
 - index.html
 - server.py
-- ...
+- additional files as required
 
-## Power On the Dell Poweredge
-- Spin up controller node.
-- IoT Dashboard can live here
+## Hardware Bring-Up
+### Dell PowerEdge
+- Power on the system
+- Spin up the controller node
+- Host the IoT Dashboard on this machine
 
-## Punch List:
-- Finish cable managmnet
-- Sort IoT devices
-- Bag up hi use cables and devices
-- Posision esxi-clients host (e.g. supports the default vlan)
+## Punch List
+- Finish cable management
+- Sort and label IoT devices
+- Bag and inventory high-use cables and spare devices
+- Position esxi-clients host  
+  - Supports the default VLAN
 
-### Finish: cable the new location (e.g. IoT Lab/the den)
-- Screened Subnet (e.g. Default vlan 1)
-- Move esxi-client dns on vlan 1
-- no dhcp reservation at the moment (e.g. esxi-client)
-- 
-- 
+## Final Setup: New Location (IoT Lab / The Den)
+- Complete physical cabling
+- Configure screened subnet
+  - Default VLAN: VLAN 1
+- Move esxi-client DNS to VLAN 1
+- DHCP configuration
+  - No reservation for esxi-client at this time
