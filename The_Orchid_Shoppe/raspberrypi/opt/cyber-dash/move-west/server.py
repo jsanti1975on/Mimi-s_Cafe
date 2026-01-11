@@ -119,4 +119,112 @@ class CustomHTTPRequestHandler(SimpleHTTPRequestHandler):
         if self.path == '/success.png':
             self.serve_image('success.png')
 
-    elif self.path == '/fetch_rss':
+        elif self.path == '/fetch_rss':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(self.fetch_rss_feed()).encode())
+
+        else:
+            super().do_GET()
+
+    # -------------------------
+    # RSS Feed
+    # -------------------------
+    def fetch_rss_feed(self):
+        url = 'https://www.securityweek.com/feed/'
+        headers = {'User-Agent': 'Mozilla/5.0'}
+
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            if response.status_code != 200:
+                logger.error(f'RSS HTTP {response.status_code}')
+                return []
+
+            feed = feedparser.parse(response.content)
+            return [
+                {
+                    'title': entry.title,
+                    'link': entry.link,
+                    'published': entry.published
+                }
+                for entry in feed.entries[:5]
+            ]
+
+        except Exception as e:
+            logger.error(f'Error fetching RSS feed: {e}')
+            return []
+
+    # -------------------------
+    # Helpers
+    # -------------------------
+    def serve_image(self, filename):
+        if not os.path.exists(filename):
+            self.send_response(404)
+            self.end_headers()
+            return
+
+        with open(filename, 'rb') as f:
+            self.send_response(200)
+            self.send_header('Content-type', 'image/png')
+            self.end_headers()
+            self.wfile.write(f.read())
+
+    def ensure_directory(self, directory):
+        os.makedirs(directory, exist_ok=True)
+
+    def sanitize_filename(self, filename):
+        filename = os.path.basename(filename)
+        if '..' in filename or filename.startswith('/'):
+            return 'fake_passwd'
+        return re.sub(r'[^a-zA-Z0-9._-]', '_', filename)
+
+    # -------------------------
+    # East Side Server File Rules
+    # -------------------------
+    def move_file(self, filepath):
+        filename = os.path.basename(filepath).lower()
+
+        if filename.startswith('orchid_'):
+            self.move_orchid_files(filepath)
+        elif filename.startswith('doc_'):
+            self.move_doc_files(filepath)
+        elif filename.startswith('after_'):
+            self.move_afterwork_files(filepath)
+        elif filename.startswith('assign_'):
+            self.move_assignment_files(filepath)
+        else:
+            self.move_assignment_files(filepath)
+
+    def move_orchid_files(self, filepath):
+        self.ensure_directory('orchids')
+        shutil.move(filepath, os.path.join('orchids', os.path.basename(filepath)))
+
+    def move_doc_files(self, filepath):
+        self.ensure_directory('docs')
+        shutil.move(filepath, os.path.join('docs', os.path.basename(filepath)))
+
+    def move_afterwork_files(self, filepath):
+        self.ensure_directory('after-work')
+        shutil.move(filepath, os.path.join('after-work', os.path.basename(filepath)))
+
+    def move_assignment_files(self, filepath):
+        self.ensure_directory('assignments')
+        shutil.move(filepath, os.path.join('assignments', os.path.basename(filepath)))
+
+
+# =========================
+# Server Bootstrap
+# =========================
+def run(server_class=HTTPServer,
+        handler_class=CustomHTTPRequestHandler,
+        port=8000):
+    server_address = ('', port)
+    httpd = server_class(server_address, handler_class)
+    logger.info(f'Starting httpd on port {port}...')
+    httpd.serve_forever()
+
+
+if __name__ == '__main__':
+    run()
+
