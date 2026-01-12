@@ -1,2 +1,3 @@
 # Uploaded the conversation 
-- **Start_Of_POS_Build_01112026.pdf*8
+- Start_Of_POS_Build_01112026.pdf
+
