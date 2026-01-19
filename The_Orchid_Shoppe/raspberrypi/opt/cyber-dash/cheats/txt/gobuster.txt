@@ -1,0 +1,11 @@
+# Directory scan
+gobuster dir -u http://TARGET -w /usr/share/wordlists/dirb/common.txt
+
+# Use extensions
+gobuster dir -u http://TARGET -w wordlist.txt -x php,txt,html
+
+# Subdomain enum
+gobuster dns -d domain.com -w subdomains.txt
+
+# Virtual host discovery
+gobuster vhost -u http://TARGET -w vhosts.txt
