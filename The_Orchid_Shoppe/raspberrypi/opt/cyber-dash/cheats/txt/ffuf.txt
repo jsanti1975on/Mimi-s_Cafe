@@ -1,0 +1,11 @@
+# Basic dir scan
+ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/dirb/common.txt
+
+# File extension fuzzing
+ffuf -u http://TARGET/FUZZ.php -w wordlist.txt -e .php,.bak,.old
+
+# Subdomain fuzz
+ffuf -u http://FUZZ.domain.com -w subdomains.txt -H "Host: FUZZ.domain.com"
+
+# Filter by response size
+ffuf -u http://TARGET/FUZZ -w wordlist.txt -fs 4242
