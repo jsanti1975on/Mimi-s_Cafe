@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FFUF Cheat</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
+    h2 { color:#00ffcc; }
+    pre { background:#111; padding:12px; border-left:4px solid #0f0; white-space:pre-wrap; }
+    a { color:#0ff; font-size:14px; }
+  </style>
+</head>
+<body>
+  <h2> FFUF Cheats</h2>
+  <pre>
+# Basic dir scan
+ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/dirb/common.txt
+
+# File extension fuzzing
+ffuf -u http://TARGET/FUZZ.php -w wordlist.txt -e .php,.bak,.old
+
+# Subdomain fuzz
+ffuf -u http://FUZZ.domain.com -w subdomains.txt -H "Host: FUZZ.domain.com"
+
+# Filter by response size
+ffuf -u http://TARGET/FUZZ -w wordlist.txt -fs 4242
+  </pre>
+  <a href="../txt/ffuf.txt" target="_blank"> Open raw .txt version</a>
+</body>
+</html>
