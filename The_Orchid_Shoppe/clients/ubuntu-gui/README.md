@@ -6,7 +6,7 @@
 
 ## Below is the directory layout.
 
-``bash
+```bash
 http-upload-server/
 ├── uploads/                # [Runtime] Uploaded files saved here
 ├── index.html              # Upload form shown in the browser
