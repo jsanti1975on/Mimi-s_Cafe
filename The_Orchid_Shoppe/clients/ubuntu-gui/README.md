@@ -15,3 +15,9 @@ http-upload-server/
 └── README.md               # Documentation and usage instructions
 ```
 
+# ubuntu-gui a client for the user to use | DVWA & Juice Shop are spun up
+<img width="1919" height="1065" alt="dvwa-1-19-2026" src="https://github.com/user-attachments/assets/c7d5ddb9-ce37-49ad-9bd7-1739da7714e1" />
+
+# Working on batch script for juice shop to spin up since running on vulnerable windows environment.
+
+
