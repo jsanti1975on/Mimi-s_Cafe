@@ -1,0 +1,53 @@
+# HASHCAT COMMAND CHEATSHEET
+# Author: Jason Santiago
+# Mode: CLI + PowerShell
+
+#########################################
+# 🎯 BASIC USAGE (Linux / macOS / WSL)
+#########################################
+
+# MD5 Hashes
+hashcat -m 0 -a 0 hashes.txt rockyou.txt
+
+# NTLM Hashes (Windows)
+hashcat -m 1000 -a 0 ntlm.txt rockyou.txt
+
+# WPA/WPA2 (hccapx or hc22000)
+hashcat -m 22000 -a 0 handshake.hc22000 rockyou.txt
+
+# Rule-based attack
+hashcat -m 0 -a 0 -r rules/best64.rule hashes.txt rockyou.txt
+
+# Brute-force (6 lowercase letters)
+hashcat -m 0 -a 3 hashes.txt ?l?l?l?l?l?l
+
+# Restore session
+hashcat --restore
+
+# Check all supported algorithms
+hashcat -b
+
+#########################################
+# 🪟 POWERSHELL / CMD USAGE (Windows)
+#########################################
+
+# Change directory into hashcat folder
+cd C:\Tools\hashcat
+
+# Basic dictionary attack
+.\hashcat.exe -m 0 -a 0 .\hashes.txt .\rockyou.txt
+
+# NTLM hash attack
+.\hashcat.exe -m 1000 -a 0 .\ntlm.txt .\rockyou.txt
+
+# WPA2 attack
+.\hashcat.exe -m 22000 -a 0 .\handshake.hc22000 .\rockyou.txt
+
+# Using rules (e.g., best64.rule)
+.\hashcat.exe -m 0 -a 0 -r .\rules\best64.rule .\hashes.txt .\rockyou.txt
+
+# Run brute-force mask (?l = lowercase)
+.\hashcat.exe -m 0 -a 3 .\hashes.txt ?l?l?l?l?l?l
+
+# Restore saved session
+.\hashcat.exe --restore
