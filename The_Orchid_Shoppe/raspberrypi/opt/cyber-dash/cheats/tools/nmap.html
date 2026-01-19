@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nmap Cheat</title>
+  <style>
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      padding: 20px;
+    }
+    h2 {
+      color: #00ffcc;
+    }
+    pre {
+      background: #111;
+      padding: 12px;
+      border-left: 4px solid #0f0;
+      white-space: pre-wrap;
+    }
+    a {
+      color: #00ffff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🛰️ Nmap Quick Cheats</h2>
+  <pre>
+# Full TCP scan with service/version detection
+nmap -sV -p- TARGET
+
+# Common ports with OS detection
+nmap -A TARGET
+
+# Fast scan top 100 ports
+nmap -F TARGET
+
+# UDP scan (slow)
+nmap -sU TARGET
+
+# Save output
+nmap -oN scan.txt TARGET
+  </pre>
+
+  <a href="../txt/nmap.txt" target="_blank">🔗 Open raw .txt version for copy/paste</a>
+</body>
+</html>
