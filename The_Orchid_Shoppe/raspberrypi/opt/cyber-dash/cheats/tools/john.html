@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>John the Ripper Cheat</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
+    h2 { color:#00ffcc; }
+    pre { background:#111; padding:12px; border-left:4px solid #0f0; white-space:pre-wrap; }
+    a { color:#0ff; font-size:14px; }
+  </style>
+</head>
+<body>
+  <h2>🔓 John the Ripper Cheats</h2>
+  <pre>
+# Crack a password file
+john hashes.txt
+
+# With specific wordlist
+john --wordlist=rockyou.txt hashes.txt
+
+# Show cracked passwords
+john --show hashes.txt
+
+# Convert to john format (if needed)
+unshadow passwd shadow > hashes.txt
+  </pre>
+  <a href="../txt/john.txt" target="_blank">🔗 Open raw .txt version</a>
+</body>
+</html>
