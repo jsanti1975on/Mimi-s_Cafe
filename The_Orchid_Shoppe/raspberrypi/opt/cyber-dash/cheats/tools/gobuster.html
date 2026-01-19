@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gobuster Cheat</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
+    h2 { color:#00ffcc; }
+    pre { background:#111; padding:12px; border-left:4px solid #0f0; white-space:pre-wrap; }
+    a { color:#0ff; font-size:14px; }
+  </style>
+</head>
+<body>
+  <h2>📁 Gobuster Cheats</h2>
+  <pre>
+# Directory scan
+gobuster dir -u http://TARGET -w /usr/share/wordlists/dirb/common.txt
+
+# Use extensions
+gobuster dir -u http://TARGET -w wordlist.txt -x php,txt,html
+
+# Subdomain enum
+gobuster dns -d domain.com -w subdomains.txt
+
+# Virtual host discovery
+gobuster vhost -u http://TARGET -w vhosts.txt
+  </pre>
+  <a href="../txt/gobuster.txt" target="_blank">🔗 Open raw .txt version</a>
+</body>
+</html>
