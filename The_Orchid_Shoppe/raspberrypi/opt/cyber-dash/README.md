@@ -1,4 +1,4 @@
-# Cyber-Dash Ecosystem  
+# Cyber-Dash Ecosystem  | => move to cheats
 **Portfolio Project | Cyber Range | Kiosk-Based Learning Environment**
 
 This repository documents the design, implementation, and roadmap of a **Windows-based kiosk launcher and multi-dashboard cyber range**, built for cybersecurity education, demonstrations, and portfolio presentation.
