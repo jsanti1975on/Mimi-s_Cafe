@@ -1,0 +1,82 @@
+Nmap cheat-sheet (grouped, one-line descriptions)
+Discovery / host discovery
+
+nmap -sn 192.168.1.0/24 — Ping/host discovery only (no port scan), list hosts that are up.
+
+nmap -Pn -p 80,443 10.0.0.1 — Skip host discovery (treat host as up) and scan the specified ports.
+
+nmap -v -sn 10.0.0.0/24 — Verbose host discovery to see discovery details.
+
+Port-scan basics
+
+nmap -sS -p 1-65535 -T4 192.168.1.0/24 — TCP SYN (stealth) scan of all ports with faster timing.
+
+nmap -sT -p 22,80,443 example.com — TCP connect() scan for specific ports (use if SYN not allowed).
+
+nmap -p- -T4 10.10.10.10 — Scan all 65,535 TCP ports on target with faster timing.
+
+nmap -F 192.168.1.0/24 — Fast scan (scans a small set of common ports).
+
+UDP & special port scans
+
+nmap -sU -p 53,67,69 192.168.1.5 — UDP scan for the listed UDP ports.
+
+nmap --top-ports 100 10.0.0.0/24 — Scan the top 100 most common ports.
+
+Service/version and OS detection
+
+nmap -sV -p 1-1000 192.168.1.20 — Probe open ports to determine service/version (ports 1–1000).
+
+nmap -O --osscan-guess 192.168.1.30 — Enable OS detection and allow Nmap to guess when uncertain.
+
+nmap -A -T4 203.0.113.5 — Aggressive scan (OS, version, scripts, traceroute) with faster timing.
+
+NSE (Nmap Scripting Engine) usage
+
+nmap -sC -sV 192.0.2.0/28 — Run default NSE scripts plus version detection across the subnet.
+
+nmap --script vuln 198.51.100.10 — Run vulnerability-category NSE scripts against the host.
+
+nmap --script "http-*" -p 80,8080 192.168.0.15 — Run all HTTP-related NSE scripts on those ports.
+
+nmap --script smb-enum-shares.nse -p 445 10.0.0.20 — Enumerate SMB shares on port 445.
+
+nmap --script http-brute --script-args userdb=users.txt,passdb=pass.txt 192.168.1.100 — HTTP brute-force using given wordlists.
+
+Output options
+
+nmap -oN scan.txt -oX scan.xml -oG scan.gnmap 192.168.1.0/24 — Save results in normal, XML, and greppable formats.
+
+nmap -oA fullscan 10.0.0.0/24 — Save in all formats with base name fullscan.
+
+nmap -sS -oG - 192.168.1.0/24 | grep Up — Greppable output to stdout and filter for hosts that are up.
+
+Evasion / stealth / obfuscation
+
+nmap -sS -D RND:10 203.0.113.0/24 — SYN scan with 10 random decoys to obfuscate origin.
+
+nmap -sS -D decoy1,decoy2,198.51.100.5 203.0.113.5 — SYN scan with named decoys and a real source.
+
+nmap -f -sS 192.168.1.50 — Fragment packets in a SYN scan to try to evade naive filters.
+
+nmap -g 53 -sS 198.51.100.5 — Use source port 53 for probes (sometimes bypasses simplistic ACLs).
+
+nmap -T0 -sS 10.0.0.5 — Very slow timing (T0) for stealthy scanning.
+
+Timing / performance tuning
+
+nmap -T4 -sS 10.0.0.1 — Faster timing template (T4) to speed the scan (more aggressive).
+
+nmap --version-intensity 9 -sV 192.168.1.101 — Increase version-detection intensity for more exhaustive probes.
+
+nmap --data-length 50 10.10.1.1 — Append 50 bytes of data to probe packets (can help bypass naive filters).
+
+Firewall / rule mapping
+
+nmap -sA 192.168.1.25 — ACK scan to map firewall rules (filtered vs unfiltered).
+
+nmap --reason --open 172.16.0.0/24 — Show reasons for port states; only display open ports.
+
+Traceroute and path
+
+nmap --traceroute 203.0.113.10 — Perform traceroute along with the scan.
