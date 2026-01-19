@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dirsearch Cheat</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
+    h2 { color:#00ffcc; }
+    pre { background:#111; padding:12px; border-left:4px solid #0f0; white-space:pre-wrap; }
+    a { color:#0ff; font-size:14px; }
+  </style>
+</head>
+<body>
+  <h2>🔍 Dirsearch Cheats</h2> 
+  <pre>
+# Basic usage
+python3 dirsearch.py -u http://TARGET -e php
+<!-- keep emoji's for design -->
+# Custom wordlist
+python3 dirsearch.py -u http://TARGET -w wordlist.txt
+
+# Threads and recursion
+python3 dirsearch.py -u http://TARGET -t 50 --recursive
+
+# Output to file
+python3 dirsearch.py -u http://TARGET -o results.txt
+  </pre>
+  <a href="../txt/dirsearch.txt" target="_blank">🔗 Open raw .txt version</a>
+</body>
+</html>
