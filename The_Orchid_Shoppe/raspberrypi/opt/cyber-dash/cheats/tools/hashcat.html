@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hashcat Cheats</title>
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+    h2 { color: #00ffcc; }
+    pre {
+      background: #111;
+      padding: 12px;
+      border-left: 4px solid #0f0;
+      white-space: pre-wrap;
+    }
+    a {
+      color: #0ff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔑 Hashcat Cheats</h2>
+
+  <h3>🎯 Basic Syntax (Linux/macOS CLI)</h3>
+  <pre>
+# Dictionary attack (MD5)
+hashcat -m 0 -a 0 hashes.txt rockyou.txt
+
+# NTLM hashes (Windows)
+hashcat -m 1000 -a 0 ntlm.txt rockyou.txt
+
+# WPA/WPA2 handshake
+hashcat -m 22000 -a 0 handshake.hc22000 rockyou.txt
+
+# Rule-based attack
+hashcat -m 0 -a 0 -r rules/best64.rule hashes.txt rockyou.txt
+
+# Brute-force mask attack
+hashcat -m 0 -a 3 hashes.txt ?l?l?l?l?l?l
+
+# Restore session
+hashcat --restore
+
+# Benchmark supported algorithms
+hashcat -b
+  </pre>
+
+  <h3>🪟 PowerShell Usage (Windows)</h3>
+  <pre>
+# Basic use in PowerShell (from hashcat folder)
+.\hashcat.exe -m 0 -a 0 .\hashes.txt .\rockyou.txt
+
+# NTLM example
+.\hashcat.exe -m 1000 -a 0 .\ntlm.txt .\rockyou.txt
+
+# WPA example (converted .hccapx or .hc22000)
+.\hashcat.exe -m 22000 -a 0 .\handshake.hc22000 .\rockyou.txt
+
+# Rule attack (ensure rule file exists)
+.\hashcat.exe -m 0 -a 0 -r .\rules\best64.rule .\hashes.txt .\rockyou.txt
+  </pre>
+
+  <a href="../txt/hashcat.txt" target="_blank">🔗 Open raw .txt version for copy/paste</a>
+</body>
+</html>
