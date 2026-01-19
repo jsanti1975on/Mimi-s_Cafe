@@ -43,7 +43,7 @@ class UploadHandler(SimpleHTTPRequestHandler):
                     return
         self.send_response(400)
         self.end_headers()
-        self.wfile.write(b"❌ Upload failed")
+        self.wfile.write(b"Upload failed")
 
 
 # --- Start Server ---
