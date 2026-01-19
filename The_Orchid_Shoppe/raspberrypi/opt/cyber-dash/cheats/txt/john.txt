@@ -1,0 +1,11 @@
+# Crack a password file
+john hashes.txt
+
+# With specific wordlist
+john --wordlist=rockyou.txt hashes.txt
+
+# Show cracked passwords
+john --show hashes.txt
+
+# Convert to john format (if needed)
+unshadow passwd shadow > hashes.txt
