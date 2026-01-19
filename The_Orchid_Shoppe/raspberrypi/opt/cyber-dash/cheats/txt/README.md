@@ -4,3 +4,8 @@
 - User can test different syntax from workstation to virtual machine
 <img width="1930" height="1004" alt="txt-01" src="https://github.com/user-attachments/assets/88bf66a6-61dc-4186-8b06-2102547e0ec7" />
 <img width="1917" height="994" alt="txt-02" src="https://github.com/user-attachments/assets/21f73b3f-d1d9-494c-982d-a9055cc2da06" />
+
+# Directory Example Image
+<img width="836" height="399" alt="txt-03" src="https://github.com/user-attachments/assets/1901c689-9543-4c9a-aabd-ba7eba08b7d1" />
+
+
