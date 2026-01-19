@@ -1,4 +1,5 @@
-# Directory
+# Directory | Below is older layout still in use but the code in use is here 
+- Add to project *html smuggling*
 ```bash
 /opt/cyber-dash/cheats
    ├── css
