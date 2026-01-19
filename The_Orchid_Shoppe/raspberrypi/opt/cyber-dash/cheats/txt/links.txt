@@ -1,0 +1,13 @@
+- Ciphers and Codes
+https://rumkin.com/tools/cipher/dancing-men/
+
+- Base64 => Practice: SGVsbG8sIFdvcmxkIQ== Operating Mode Decoded to: Hello, World!
+
+https://rumkin.com/tools/cipher/base64/
+
+# Below is a beautifier for JavaScript
+https://codebeautify.org/jsviewer
+# Below is image to base64-converter
+https://codebeautify.org/image-to-base64-converter
+# Below is the base url to the site
+https://codebeautify.org/
