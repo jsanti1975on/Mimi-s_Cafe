@@ -29,3 +29,6 @@ http-upload-server/
 - Add .desktop launcher for GUI users
 - Optional ZIP download of all uploaded files
 - ...
+
+# Working with image below
+<img width="842" height="608" alt="quik-http-share-0" src="https://github.com/user-attachments/assets/c63f5724-469a-40e0-8a6c-21ed266ea4d5" />
