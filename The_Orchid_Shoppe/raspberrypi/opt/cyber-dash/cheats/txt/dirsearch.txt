@@ -1,0 +1,13 @@
+# Basic usage
+python3 dirsearch.py -u http://TARGET -e php
+
+# Custom wordlist
+python3 dirsearch.py -u http://TARGET -w wordlist.txt
+
+# Threads and recursion
+python3 dirsearch.py -u http://TARGET -t 50 --recursive
+
+# Output to file
+python3 dirsearch.py -u http://TARGET -o results.txt
+
+# User can add personal python based code 
