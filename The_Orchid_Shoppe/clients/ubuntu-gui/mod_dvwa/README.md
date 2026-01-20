@@ -1,4 +1,4 @@
-# Use the dvwa to lear how to create challenges
+# Use the dvwa to learn how to create challenges
 - modify existing challenges [x]
 - create arbituary flags [x]
 - use flags to answer questions []
