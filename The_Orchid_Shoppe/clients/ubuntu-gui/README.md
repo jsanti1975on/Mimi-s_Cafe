@@ -6,7 +6,7 @@
 - Binds to the proper nic
 - Uses a config.ini to set the ip address
 
-## Below is the directory layout.
+## Below is the directory layout. Purpose: spun up to share files
 
 ```bash
 http-upload-server/
