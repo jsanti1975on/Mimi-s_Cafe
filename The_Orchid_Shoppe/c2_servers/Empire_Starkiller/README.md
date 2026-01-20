@@ -62,4 +62,4 @@ tcp.port == 80
 # Empire Machine: Ping to DG - ok, Ping to target-win10 - false
 <img width="1864" height="1029" alt="last-starkiller-image" src="https://github.com/user-attachments/assets/bbc0b5f3-2cdf-46b4-9dc2-e72ed7ff7a21" />
 
-# Add more c2 content e.g. slive  or continue with dvwa add ctf flags
+# Add more c2 content e.g. sliver  or continue with dvwa add ctf flags
