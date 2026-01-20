@@ -1,4 +1,4 @@
-# ubuntu-gui: This repo will be used anything related to the students lab machine
+# ubuntu-gui: This repo will be used for anything related to the students lab machine
 - Decide on application to use for ubuntu-gui from pos terminal []
 - Move POS terminal to IoT den or leave in cafe []
 
