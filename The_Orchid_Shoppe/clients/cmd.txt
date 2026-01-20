@@ -1,0 +1,27 @@
+sudo apt install -y \
+    git \
+    curl \
+    wget \
+    python3 \
+    python3-pip \
+    python3-venv \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python3-dev \
+    mysql-server \
+    libmysqlclient-dev \
+    jq \
+    unzip \
+    lsb-release
+---
+cd ~
+git clone https://github.com/BC-SECURITY/Empire.git
+cd Empire
+./setup/install.sh -y
+---
+./empire.py server
+---
+chmod +x Starkiller-*.AppImage
+---
+./Starkiller-*.AppImage
