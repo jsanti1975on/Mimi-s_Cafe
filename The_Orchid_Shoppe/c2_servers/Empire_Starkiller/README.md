@@ -58,3 +58,4 @@ tcp.port == 80
 
 > This filter isolates Empire’s default HTTP listener traffic to focus on agent communications.
 
+<img width="1864" height="1029" alt="last-starkiller-image" src="https://github.com/user-attachments/assets/bbc0b5f3-2cdf-46b4-9dc2-e72ed7ff7a21" />
