@@ -25,4 +25,36 @@ This demo shows a successful `ipconfig` command execution on a Windows 10 target
 > Target
 <img width="1246" height="969" alt="image" src="https://github.com/user-attachments/assets/b6bdaba2-685c-4ca6-8010-db9bb372408b" />
 
+## 🔍 Empire C2 Traffic Analysis via Wireshark
+
+The screenshot below captures network traffic between an Empire agent and the C2 server over **TCP port 80**.
+
+<img width="1849" height="488" alt="ab826032-ef9c-4bbf-ba3d-6cb479c61756" src="https://github.com/user-attachments/assets/66424733-b614-4075-a27e-e3070a94bc4f" />
+
+
+### 🖥 Empire C2 Server
+- **IP Address:** `172.20.10.103`
+- **Role:** Empire HTTP listener (stager + agent C2)
+
+### 🎯 Target/Agent System
+- **IP Address:** `185.125.190.17` *(or internal redirected traffic depending on setup)*
+- **Role:** Empire stager/agent beaconing back to Empire server
+
+---
+
+### 🧠 Key Observations
+- ✅ **TCP 3-Way Handshake** initiated from agent
+- ✅ **HTTP GET** requests used for stager communication
+- ⚠️ **TCP Retransmissions** and **Duplicate ACKs** present due to lab network conditions
+- 🛠 Empire uses HTTP(S)-based agents which regularly beacon to the Empire listener
+
+---
+
+### 📄 Example Wireshark Filter Used
+
+```wireshark
+tcp.port == 80
+```
+
+> This filter isolates Empire’s default HTTP listener traffic to focus on agent communications.
 
