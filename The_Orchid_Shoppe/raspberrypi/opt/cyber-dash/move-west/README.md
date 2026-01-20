@@ -20,6 +20,11 @@ Moving West Side assets into this project:
 - Bag and inventory high-use cables and spare devices
 - Position esxi-clients host  
   - Supports the default VLAN
+- EtherChannel run to west
+- Cont. with Cisco AP CAPWAP e.g. wireless controller
+-   stick to Information Security labs
+- When new AP ready get IoT devices online once (e.g. get MAC addresses)
+- Move POS terminal to IoT den []
 
 ## Final Setup: New Location (IoT Lab / The Den)
 - Complete physical cabling
