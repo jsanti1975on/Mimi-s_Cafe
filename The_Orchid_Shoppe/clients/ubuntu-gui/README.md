@@ -1,6 +1,6 @@
 # ubuntu-gui: This repo will be used for anything related to the students lab machine
 - Decide on application to use for ubuntu-gui from pos terminal []
-- Move POS terminal to IoT den or leave in cafe []
+- Move POS terminal to IoT den or leave in cafe [x] moved to den
 
 ## Below is the directory of the *quik and dirty* file uploader.
 - Binds to the proper nic
