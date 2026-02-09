@@ -1,5 +1,5 @@
 # cyber-dash: buttons on web page open below files
-
+- No modularization of the web app by design
 ---
 
 ## 🧠 East Side Server (IoT Subnet)
