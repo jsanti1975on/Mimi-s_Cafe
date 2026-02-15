@@ -1,14 +1,19 @@
 import subprocess
 import ipaddress
 import platform
-from concurrent.futures import ThreadPoolExecuter
+from concurrent.futures import ThreadPoolExecutor
 
 def ping(ip):
-# Cont. writting this out
-    param = "-n" if platform.system().lower() == "windows" else "-c"
+    system = platform.system().lower()
+
+    if system == "windows":
+        cmd = ["ping", "-n", "1", "-w", "500", str(ip)]
+    else:
+        cmd = ["ping", "-c", "1", "-W", "1", str(ip)]
+
     try:
         subprocess.run(
-            ["ping", param, "1", "-w", "500", str(ip)],
+            cmd,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
@@ -19,23 +24,19 @@ def is_valid_host(ip, mac):
     try:
         ip_obj = ipaddress.ip_address(ip)
 
-        # Remove multicast
         if ip_obj.is_multicast:
             return False
 
-        # Remove broadcast
         if ip == "255.255.255.255" or ip.endswith(".255"):
             return False
 
-        # Remove broadcast MAC
-        if mac.lower() == "ff-ff-ff-ff-ff-ff":
+        if mac.lower() in ["ff-ff-ff-ff-ff-ff", "ff:ff:ff:ff:ff:ff"]:
             return False
 
         return True
 
     except ValueError:
         return False
-
 
 def get_arp_entries():
     output = subprocess.check_output(["arp", "-a"]).decode(errors="ignore")
@@ -63,6 +64,6 @@ def discover(subnet):
     print("\n[*] Live Hosts (ARP Cache):")
     for ip, mac in get_arp_entries():
         print(f"{ip:15} → {mac}")
-# Next work on parsing the IP address. 
+
 if __name__ == "__main__":
-    discover("0.0.0.0/24")
+    discover("10.10.10.10/24")
