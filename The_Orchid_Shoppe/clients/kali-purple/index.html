@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kill Chain Flag Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lockheed Martin Cyber Kill Chain</h1>
+        <h2>Flag Submission Portal</h2>
+
+        <div class="scoreboard">
+            <p><strong>Total Flags Captured:</strong> {{ total_correct }}/5</p>
+            <ul>
+                <li>Flag 1 - Reconnaissance: {% if score.flag1 %}✅{% else %}❌{% endif %}</li>
+                <li>Flag 2 - Delivery: {% if score.flag2 %}✅{% else %}❌{% endif %}</li>
+                <li>Flag 3 - Exploitation: {% if score.flag3 %}✅{% else %}❌{% endif %}</li>
+                <li>Flag 4 - Lateral Movement: {% if score.flag4 %}✅{% else %}❌{% endif %}</li>
+                <li>Flag 5 - Actions on Objectives: {% if score.flag5 %}✅{% else %}❌{% endif %}</li>
+            </ul>
+        </div>
+
+        <form method="POST">
+            <label for="flag_name">Select Flag:</label>
+            <select name="flag_name" id="flag_name" required>
+                <option value="flag1">Flag 1</option>
+                <option value="flag2">Flag 2</option>
+                <option value="flag3">Flag 3</option>
+                <option value="flag4">Flag 4</option>
+                <option value="flag5">Flag 5</option>
+            </select>
+
+            <label for="submitted_flag">Enter Flag:</label>
+            <input type="text" name="submitted_flag" id="submitted_flag" placeholder="flag{example_answer}" required>
+
+            <button type="submit">Submit Flag</button>
+        </form>
+
+        <form method="POST" action="/reset">
+            <button type="submit" class="reset-btn">Reset Score</button>
+        </form>
+
+        {% if message %}
+        <div class="message">
+            <p>{{ message }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
