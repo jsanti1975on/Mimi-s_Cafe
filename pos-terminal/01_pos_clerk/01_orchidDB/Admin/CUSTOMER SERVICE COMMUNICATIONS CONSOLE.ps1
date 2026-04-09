@@ -13,9 +13,9 @@
 # - Integrity ledger checks
 # - Recent PDF / POS lookup
 # - Folder shortcuts
+# - Task Tracker
 # ============================================
-# Write the autocreate file code to create the file Overnight.csv like the other portions of project do.
-# Also get labtop version of overnight up to date as well. 
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
