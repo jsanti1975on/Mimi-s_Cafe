@@ -18,17 +18,14 @@
 # Also get labtop version of overnight up to date as well. 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
-Add-Type -AssemblyName Microsoft.VisualBasic
 
 # ============================================
 # CONFIGURATION
 # ============================================
-$RootPath             = "F:\PropShop Accounting\CUSTOMER_SERVICE_SPECIALIST\01_CUST_SV_CONSOLE\"
+$RootPath             = "H:\01_CUSTOMER_SERVICE_SPECIALIST\01_marinaDB"
 $SlipRoot             = Join-Path $RootPath "SLIPS"
 $AgreementRoot        = Join-Path $RootPath "Agreements"
-$FinanceRoot          = ""
-$SearchRoot           = "F:\PropShop Accounting\CUSTOMER_SERVICE_SPECIALIST\01_CUST_SV_CONSOLE\Agreements"
-$WeeklySlipFile       = Join-Path $RootPath "Weekly_Slip_Normalized.csv" #Source of Truth
+#$SearchRoot           = "H:\PropShop Accounting\CUSTOMER_SERVICE_SPECIALIST\01_marinaDB\Agreements"
 $IndexFile            = Join-Path $RootPath "SlipMasterIndex.csv"
 $IntegrityLedgerFile  = Join-Path $RootPath "IntegrityLedger.csv"
 $CallLogRoot          = Join-Path $RootPath "CallLogs"
@@ -41,6 +38,46 @@ if (-not (Test-Path $RootPath)) { New-Item -Path $RootPath -ItemType Directory -
 if (-not (Test-Path $SlipRoot)) { New-Item -Path $SlipRoot -ItemType Directory -Force | Out-Null }
 if (-not (Test-Path $AgreementRoot)) { New-Item -Path $AgreementRoot -ItemType Directory -Force | Out-Null }
 if (-not (Test-Path $CallLogRoot)) { New-Item -Path $CallLogRoot -ItemType Directory -Force | Out-Null }
+
+# ============================================
+# TASK TRACKER CONFIG (EMBEDDED)
+# ============================================
+$TrackerRoot       = Join-Path $RootPath "Tracker"
+$TrackerDataPath   = Join-Path $TrackerRoot "Data"
+$TrackerLogPath    = Join-Path $TrackerRoot "Logs"
+
+$ActiveTaskFile    = Join-Path $TrackerDataPath "ActiveTasks.json"
+$SessionLogFile    = Join-Path $TrackerLogPath  "TaskSessions.csv"
+
+# Ensure structure
+foreach ($p in @($TrackerRoot, $TrackerDataPath, $TrackerLogPath)) {
+    if (-not (Test-Path $p)) {
+        New-Item -Path $p -ItemType Directory -Force | Out-Null
+    }
+}
+
+# Initialize active slots
+if (-not (Test-Path $ActiveTaskFile)) {
+    @(
+        [PSCustomObject]@{ Slot = 1; TaskName = ""; StartTime = $null; IsActive = $false }
+        [PSCustomObject]@{ Slot = 2; TaskName = ""; StartTime = $null; IsActive = $false }
+        [PSCustomObject]@{ Slot = 3; TaskName = ""; StartTime = $null; IsActive = $false }
+    ) | ConvertTo-Json | Set-Content $ActiveTaskFile
+}
+
+# Initialize log
+if (-not (Test-Path $SessionLogFile)) {
+    "Slot,TaskName,StartTime,StopTime,DurationMinutes,DurationHours,WorkDate" |
+        Set-Content $SessionLogFile
+}
+
+function Get-ActiveTasks {
+    (Get-Content $ActiveTaskFile -Raw | ConvertFrom-Json)
+}
+
+function Save-ActiveTasks($tasks) {
+    $tasks | ConvertTo-Json | Set-Content $ActiveTaskFile
+}
 
 # Create SlipMasterIndex.csv if missing
 if (-not (Test-Path $IndexFile)) {
@@ -74,15 +111,40 @@ if (-not (Test-Path $IntegrityLedgerFile)) {
 }
 
 # ============================================
-# HELPER FUNCTIONS
-# ============================================> March 19 2026 - Below function for the addition of GUI's
+# HELPER FUNCTIONS | TASK TRACKER FUNCTIONS
+# ============================================
+
+function Show-DailyTaskSummary {
+
+    $today = (Get-Date).ToString("yyyy-MM-dd")
+
+    $rows = Import-Csv $SessionLogFile |
+        Where-Object { $_.WorkDate -eq $today }
+
+    if (-not $rows) {
+        Write-Status "No task data for today."
+        return
+    }
+
+    $summary = $rows |
+        Group-Object TaskName |
+        ForEach-Object {
+            $total = ($_.Group | Measure-Object DurationHours -Sum).Sum
+            [PSCustomObject]@{
+                TaskName = $_.Name
+                Hours    = [math]::Round($total,2)
+            }
+        }
+
+    Show-DataGridView -Data $summary -Title "Daily Task Summary"
+}
+
 function Add-OvernightEntry {
 # Reminder to add file field or create the file if not exist: 03-27-2026 Added a builder script to handle file creation if not exist.
     param(
         [string]$SlipNumber,
         [string]$StaffName,
-        [string]$Note,
-        [string]$FilePath
+        [string]$Note
     )
 
     if ([string]::IsNullOrWhiteSpace($Note)) {
@@ -128,7 +190,7 @@ function View-OvernightLog {
 
     Show-DataGridView -Data $data -Title "Overnight / Follow-Up Log"
 }
-# ============================================> March 19 2026 - Above function for the addition of GUI's
+
 function Write-Status {
     param([string]$Message)
     $txtStatus.AppendText("[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $Message`r`n")
@@ -160,7 +222,7 @@ function Ensure-SlipFolder {
 
     return $folder
 }
-# ===============================================================================================================================================================
+
 function Import-SlipIndex {
     if (Test-Path $IndexFile) {
         return Import-Csv $IndexFile
@@ -325,17 +387,14 @@ function Add-IntegrityRecord {
 
     $ledger = @($ledger) + $entry
     $ledger | Export-Csv -Path $IntegrityLedgerFile -NoTypeInformation
-# 03182026 Hash ok - review Export-Csv
+
     return [pscustomobject]@{
         Result = "Logged"
         Hash   = $hash
         Match  = $null
     }
 }
-# ========== Below: The Show-DataGridView function replaced Show-DataGridView ========== 03-19-2026
-# ========== Use find replace: replace all `Show-DataGridView` with  `Show-DataGridView` ==========> Done
-# ========== Show-DataGridView function use: used to show a more polished report/viewer related to queries
-# ========== The function is also the part that replaces input boxes with gui forms, change/revision 03-19-2026
+
 function Show-DataGridView {
 
     param(
@@ -414,9 +473,9 @@ function Show-DataGridView {
             }
         }
 
-        # Next try the slipNumber
-        if ($row.Cells["slipNumber"] -and $row.Cells["slipNumber"].Value) {
-            $slip = $row.Cells["slipNumber"].Value
+        # Next try the SlipNumber 04-09-2026 slipNumber cganged to SlipNumber
+        if ($row.Cells["SlipNumber"] -and $row.Cells["SlipNumber"].Value) {
+            $slip = $row.Cells["SlipNumber"].Value
             $folder = Get-SlipFolderPath -SlipNumber $slip
             if ($folder -and (Test-Path $folder)) {
                 Start-Process explorer.exe $folder
@@ -444,16 +503,6 @@ function Show-DataGridView {
     # SHOW FORM
     # ========================================
     $gridForm.ShowDialog()
-}
-# 03-27-2026: Any remaining InputBoxes need to be removed
-# ========== Above: The Show-DataGridView function replaced Show-DataGridView ========== 03-19-2026
-function Prompt-Value {
-    param(
-        [string]$Prompt,
-        [string]$Title = "Marina Control Center",
-        [string]$Default = ""
-    )
-    return [Microsoft.VisualBasic.Interaction]::InputBox($Prompt, $Title, $Default)
 }
 
 # ============================================
@@ -526,7 +575,7 @@ $txtStatus.Location = New-Object System.Drawing.Point(10, 22)
 $grpStatus.Controls.Add($txtStatus)
 
 # ============================================
-# LOOKUP BUTTONS | 03-20-2026 Next button needed based on production flow is a lookup | Done
+# LOOKUP BUTTONS 
 # ============================================
 $btnSlipLookup = New-Object System.Windows.Forms.Button
 $btnSlipLookup.Text = "Slip Lookup"
@@ -592,7 +641,7 @@ $btnRefreshIndex.Text = "View Slip Index"
 $btnRefreshIndex.Size = New-Object System.Drawing.Size(140, 40)
 $btnRefreshIndex.Location = New-Object System.Drawing.Point(320, 35)
 $grpOps.Controls.Add($btnRefreshIndex)
-# {^_^}LOOKFLAG==> Button Tested  and Deployed 03-20-2026 Note: Mark open is Overnight Follow up - use ctl-H and find replace with new name at some point
+
 $btnMarkOpen = New-Object System.Windows.Forms.Button
 $btnMarkOpen.Text = "Quik Note"
 $btnMarkOpen.Size = New-Object System.Drawing.Size(140, 40)
@@ -600,7 +649,7 @@ $btnMarkOpen.Location = New-Object System.Drawing.Point(20, 95)
 $btnMarkOpen.BackColor = [System.Drawing.Color]::CadetBlue
 $btnMarkOpen.ForeColor = [System.Drawing.Color]::White
 $grpOps.Controls.Add($btnMarkOpen)
-# 03-31-2026: The btnMarkOpen is going to be reworked since we now have the slipboard for staff to use.
+
 $btnMarkOccupied = New-Object System.Windows.Forms.Button
 $btnMarkOccupied.Text = "Update Occupied"
 $btnMarkOccupied.Size = New-Object System.Drawing.Size(140, 40)
@@ -615,7 +664,29 @@ $btnQuit.BackColor = [System.Drawing.Color]::MistyRose
 $grpOps.Controls.Add($btnQuit)
 
 # ============================================
-# FOLDERS BUTTONS | 04-03-2026 comment out ...
+# TASK TRACKER BUTTONS
+# ============================================
+$btnStartTask = New-Object System.Windows.Forms.Button
+$btnStartTask.Text = "Task Tracker"
+$btnStartTask.Size = New-Object System.Drawing.Size(140, 40)
+$btnStartTask.Location = New-Object System.Drawing.Point(20, 155)
+$btnStartTask.BackColor = [System.Drawing.Color]::LightGreen
+$grpOps.Controls.Add($btnStartTask)
+
+$btnStopTask = New-Object System.Windows.Forms.Button
+$btnStopTask.Text = "Stop Task"
+$btnStopTask.Size = New-Object System.Drawing.Size(140, 40)
+$btnStopTask.Location = New-Object System.Drawing.Point(170, 155)
+$grpOps.Controls.Add($btnStopTask)
+
+$btnTaskSummary = New-Object System.Windows.Forms.Button
+$btnTaskSummary.Text = "Daily Summary"
+$btnTaskSummary.Size = New-Object System.Drawing.Size(140, 40)
+$btnTaskSummary.Location = New-Object System.Drawing.Point(320, 155)
+$grpOps.Controls.Add($btnTaskSummary)
+
+# ============================================
+# FOLDERS BUTTONS
 # ============================================
 $btnOpenSlipsRoot = New-Object System.Windows.Forms.Button
 $btnOpenSlipsRoot.Text = "Open SLIPS"
@@ -659,12 +730,9 @@ $btnOpenRoot.Location = New-Object System.Drawing.Point(320, 35)
 $grpAdmin.Controls.Add($btnOpenRoot)
 
 # ============================================
-# EVENT HANDLERS | AddED Slip Lookup 03-20-2026, Adding btnTenantLookup 03-31-2026 | Made use of btnMarkOpen using overnight/follow up
-# 04-02-2026: SlipBoard is complete with ability to add a note to only open slips, We can use this button for Admin to add notes to perm tenants. Not written yet - !!!!
-# 04-04-2026: Writting the logic for the legal binding documents btnIntegrityCheck.
+# EVENT HANDLERS 
 # ============================================
 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------04-04-2026 below ----------->
 # Integrity Ledger 
 $btnIntegrityCheck.Add_Click({
 
@@ -694,7 +762,7 @@ $btnIntegrityCheck.Add_Click({
     }
 
     # ================================================================================
-    # FILE SELECTION | Reminder: Used a dialog picker for this one
+    # FILE SELECTION 
     # ================================================================================
     $hashForm.Controls.Add((New-Label "Selected File" 20))
 
@@ -726,7 +794,6 @@ $btnIntegrityCheck.Add_Click({
     # BUTTONS
     # ================================================================================
     $btnLog = New-Object System.Windows.Forms.Button
-    # Changing Hash to Checksum - You hash a file to get a checksum
     $btnLog.Text = "Log Checksum"
     $btnLog.Size = New-Object System.Drawing.Size(120, 30)
     $btnLog.Location = New-Object System.Drawing.Point(120, 160)
@@ -775,7 +842,7 @@ $btnIntegrityCheck.Add_Click({
                 -FilePath $txtFile.Text `
                 -SlipNumber $slip `
                 -Notes $txtNotes.Text
-# {^_^}LOOKFLAG=> Reminder about the clock sku issue from other duplicates
+
             if ($result.Result -eq "Duplicate") {
                 [System.Windows.Forms.MessageBox]::Show(
                     "Duplicate file detected. `nHash: $($result.Hash)",
@@ -796,7 +863,7 @@ $btnIntegrityCheck.Add_Click({
             $hashForm.Close()
         }
         catch {
-            [System.Windows.Forms.MessageBox]::Show($_.Exeception.Message) | Out-Null
+            [System.Windows.Forms.MessageBox]::Show($_.Exception.Message) | Out-Null
         }
     })
 
@@ -811,8 +878,6 @@ $btnIntegrityCheck.Add_Click({
 
     $hashForm.ShowDialog()
 })         
- 
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------04-04-2026 Above ----------->
 
 $btnMarkOpen.Add_Click({
 
@@ -868,8 +933,7 @@ $btnMarkOpen.Add_Click({
     $btnSave.Text = "Save Entry"
     $btnSave.Size = New-Object System.Drawing.Size(120, 30)
     $btnSave.Location = New-Object System.Drawing.Point(90, 250)
-        
-# Stop Point 03-19-2026
+
     $btnView = New-Object System.Windows.Forms.Button
     $btnView.Text = "View Log"
     $btnView.Size = New-Object System.Drawing.Size(120, 30)
@@ -926,9 +990,7 @@ $btnMarkOpen.Add_Click({
     
     $noteForm.ShowDialog()
 })
-# ABOVE LOGIC WRITTEN 03-19-2026
-# Below is logic written 03-20-2026
-# === 03-31-2026 === Both btnSlip Lookup and btnTenant Lookup will use the SlipMasterIndex file.==========================================================================================================
+
 $btnTenantLookup.Add_Click({
 
     $form.Hide()
@@ -1022,7 +1084,7 @@ $btnTenantLookup.Add_Click({
         
     $tenantForm.ShowDialog()
 })
-# ==== 03-31-2026 LOGIC ABOVE =
+
 $btnSlipLookup.Add_Click({
 
     $form.Hide()
@@ -1072,7 +1134,7 @@ $btnSlipLookup.Add_Click({
     $slipForm.Controls.Add($btnCancel)
         
     # ============================================
-    # EVENTS | Later add more error handle e.g. IsNumeric?
+    # EVENTS
     # ============================================ 
     $btnSearch.Add_Click({
         try {
@@ -1095,8 +1157,7 @@ $btnSlipLookup.Add_Click({
                 [System.Windows.Forms.MessageBox]::Show("Weekly slip file not found.") | Out-Null
                 return
             }
-# 03-31-2026 Decided to use the SlipMasterIndex file as the file to lookup data from so --------------> $data = Import-SlipIndex ----> This means update the .csv file will all records.
-#           $data = Import-Csv $WeeklySlipFile #==========================================================================================================================
+
             $data = Import-SlipIndex
 
             $result = $data | Where-Object {
@@ -1130,8 +1191,7 @@ $btnSlipLookup.Add_Click({
 
     $slipForm.ShowDialog()
 })
-# === 03-31-2026 === Both btnSlip Lookup and btnTenant Lookup will use the SlipMasterIndex file.==========================================================================================================
-# Below is logic written 03-21-2026
+
 $btnAgreementEntry.Add_Click({
 
     $form.Hide()
@@ -1251,7 +1311,7 @@ $btnAgreementEntry.Add_Click({
                 $agreementForm.Close()
         }
         catch {
-            [System.Windows.MessageBox]::Show($_.Exeception.Message) | Out-Null
+            [System.Windows.MessageBox]::Show($_.Exception.Message) | Out-Null
         }
     })
 
@@ -1266,9 +1326,7 @@ $btnAgreementEntry.Add_Click({
 
     $agreementForm.ShowDialog()
 })
-# Stop Point 03-21-2026: Reminder - SlipMasterIndex.csv has to have text arranged in the builder script manner.
-# If no data exist or an empty string is 1ST LINE - Exception.Message will 'Null Data Binding Exception' 
-# 03-24-2026: The click event needs to use the show hide method. 03-24-2026 Adding the show hide...04-03-26 changed result to handle SlipMasterIndex.csv
+
 $btnOpenSlips.Add_Click({
 
     try {
@@ -1277,7 +1335,7 @@ $btnOpenSlips.Add_Click({
         
         # Get data
         $data = Import-SlipIndex
-# =================================================================== 04-03-2026: Change Below: Get all possible slips  ==========================================> 
+
     $allSlips = 1..80
 
     $occupiedSlips = $data | ForEach-Object {
@@ -1294,7 +1352,7 @@ $btnOpenSlips.Add_Click({
             Status      =  "Open"
         }            
     }
-# =================================================================== 04-03-2026: Change Below: Get all possible slips  ==========================================>
+
         if (-not $result) {
             [System.Windows.Forms.MessageBox]::Show("No open slips found.")
         }
@@ -1314,15 +1372,10 @@ $btnOpenSlips.Add_Click({
 
 })
 
-# 03-21-2026: Above is logic written 03-21-2026, 03-24-2026 The above logic needs to use show hide method 
-#     It's use is for looking for open slips WHEN TENANT WALKS IN FOR AN OVERNIGHT- Added 03-24-2026
-# 04-03-2026: Added a drop in that uses basic math to prepare a clean list of open slips by subtracting out COMMERCIAL slips from open slips list.
-# 04-03-2026: The slip map tool handle "WHEN TENANT WALKS IN FOR AN OVERNIGHT" - General Notes if used are already programmed.
-# VIEW LEDGER BELOW
 $btnViewLedger.Add_Click({
     try {
         $ledger = Import-IntegrityLedger
-        Show-Grid -Data $ledger -Title "IntegrityLedger.csv"
+        Show-DataGridView -Data $ledger -Title "IntegrityLedger.csv"
         Write-Status "Integrity ledger opened in grid view."
     } catch {
         Write-Status "ERROR viewing ledger: $($_.Exception.Message)"
@@ -1354,7 +1407,294 @@ $form.Add_Shown({
     Write-Status "Slip index: $IndexFile"
     Write-Status "Integrity ledger: $IntegrityLedgerFile"
 })
+# ============================================
+# TASK TRACKER EVENTS
+# ============================================
+# BUTTON START TASK ==========================
+$btnStartTask.Add_Click({
 
+    $form.Hide()
+
+    # ========================================
+    # TASK TRACKER FORM
+    # ========================================
+    $taskForm = New-Object System.Windows.Forms.Form
+    $taskForm.Text = "Start Task"
+    $taskForm.Size = New-Object System.Drawing.Size(400, 220)
+    $taskForm.StartPosition = "CenterScreen"
+
+    function New-Label($text, $y) {
+        $lbl = New-Object System.Windows.Forms.Label
+        $lbl.Text = $text
+        $lbl.Location = New-Object System.Drawing.Point(20, $y)
+        $lbl.Size = New-Object System.Drawing.Size(120, 20)
+        return $lbl
+    }
+
+    function New-Textbox($y) {
+        $txt = New-Object System.Windows.Forms.TextBox
+        $txt.Location = New-Object System.Drawing.Point(150, $y)
+        $txt.Size = New-Object System.Drawing.Size(200, 20)
+        return $txt
+    }
+
+    # Task Name Input
+    $taskForm.Controls.Add((New-Label "Task Name" 40))
+    $txtTask = New-Textbox 40
+    $taskForm.Controls.Add($txtTask)
+
+    # Buttons
+    $btnStart = New-Object System.Windows.Forms.Button
+    $btnStart.Text = "Start Task"
+    $btnStart.Size = New-Object System.Drawing.Size(120, 30)
+    $btnStart.Location = New-Object System.Drawing.Point(60, 100)
+
+    $btnCancel = New-Object System.Windows.Forms.Button
+    $btnCancel.Text = "Cancel"
+    $btnCancel.Size = New-Object System.Drawing.Size(120, 30)
+    $btnCancel.Location = New-Object System.Drawing.Point(200, 100)
+
+    $taskForm.Controls.Add($btnStart)
+    $taskForm.Controls.Add($btnCancel)
+
+    # ========================================
+    # EVENTS
+    # ========================================
+    $btnStart.Add_Click({
+        $taskName = $txtTask.Text
+
+        if ([string]::IsNullOrWhiteSpace($taskName)) {
+            [System.Windows.Forms.MessageBox]::Show("Task name required.") | Out-Null
+            return
+        }
+
+        $tasks = Get-ActiveTasks
+
+        if ($tasks | Where-Object { $_.IsActive -and $_.TaskName -eq $taskName }) {
+            [System.Windows.Forms.MessageBox]::Show("Task already active.") | Out-Null
+            return
+        }
+
+        $slot = $tasks | Where-Object { -not $_.IsActive } | Select-Object -First 1
+
+        if (-not $slot) {
+            [System.Windows.Forms.MessageBox]::Show("All task slots are in use.") | Out-Null
+            return
+        }
+
+        $slot.TaskName  = $taskName
+        $slot.StartTime = (Get-Date).ToString("o")
+        $slot.IsActive  = $true
+
+        Save-ActiveTasks $tasks
+
+        Write-Status "TASK STARTED → Slot $($slot.Slot) | $taskName"
+
+        $taskForm.Close()
+    })
+
+    $btnCancel.Add_Click({
+        $taskForm.Close()
+    })
+
+    $taskForm.Add_FormClosed({
+        $form.Show()
+    })
+
+    $taskForm.ShowDialog()
+})
+#===== button to stop task 
+$btnStopTask.Add_Click({
+
+    $form.Hide()
+
+    # ========================================
+    # STOP TASK FORM
+    # ========================================
+    $stopForm = New-Object System.Windows.Forms.Form
+    $stopForm.Text = "Stop Task"
+    $stopForm.Size = New-Object System.Drawing.Size(420, 260)
+    $stopForm.StartPosition = "CenterScreen"
+
+    function New-Label($text, $y) {
+        $lbl = New-Object System.Windows.Forms.Label
+        $lbl.Text = $text
+        $lbl.Location = New-Object System.Drawing.Point(20, $y)
+        $lbl.Size = New-Object System.Drawing.Size(150, 20)
+        return $lbl
+    }
+
+    # ========================================
+    # DROPDOWN (SLOT SELECTOR)
+    # ========================================
+    $stopForm.Controls.Add((New-Label "Select Slot" 30))
+
+    $cmbSlots = New-Object System.Windows.Forms.ComboBox
+    $cmbSlots.Location = New-Object System.Drawing.Point(180, 30)
+    $cmbSlots.Size = New-Object System.Drawing.Size(180, 20)
+    $cmbSlots.DropDownStyle = "DropDownList"
+    $stopForm.Controls.Add($cmbSlots)
+
+    # ========================================
+    # ACTIVE TASK PREVIEW
+    # ========================================
+    $stopForm.Controls.Add((New-Label "Active Task" 70))
+
+    $lblTaskName = New-Object System.Windows.Forms.Label
+    $lblTaskName.Location = New-Object System.Drawing.Point(180, 70)
+    $lblTaskName.Size = New-Object System.Drawing.Size(200, 20)
+    $lblTaskName.Text = "-"
+    $stopForm.Controls.Add($lblTaskName)
+
+    $stopForm.Controls.Add((New-Label "Start Time" 100))
+
+    $lblStartTime = New-Object System.Windows.Forms.Label
+    $lblStartTime.Location = New-Object System.Drawing.Point(180, 100)
+    $lblStartTime.Size = New-Object System.Drawing.Size(200, 20)
+    $lblStartTime.Text = "-"
+    $stopForm.Controls.Add($lblStartTime)
+
+    # ========================================
+    # BUTTONS
+    # ========================================
+    $btnStop = New-Object System.Windows.Forms.Button
+    $btnStop.Text = "Stop Task"
+    $btnStop.Size = New-Object System.Drawing.Size(120, 30)
+    $btnStop.Location = New-Object System.Drawing.Point(70, 150)
+
+    $btnCancel = New-Object System.Windows.Forms.Button
+    $btnCancel.Text = "Cancel"
+    $btnCancel.Size = New-Object System.Drawing.Size(120, 30)
+    $btnCancel.Location = New-Object System.Drawing.Point(220, 150)
+
+    $stopForm.Controls.Add($btnStop)
+    $stopForm.Controls.Add($btnCancel)
+
+    # ========================================
+    # LOAD ACTIVE TASKS INTO DROPDOWN
+    # ========================================
+    $tasks = Get-ActiveTasks
+
+    $activeTasks = $tasks | Where-Object { $_.IsActive }
+
+    if (-not $activeTasks -or $activeTasks.Count -eq 0) {
+        [System.Windows.Forms.MessageBox]::Show("No active tasks to stop.") | Out-Null
+        $form.Show()
+        return
+    }
+
+    foreach ($t in $activeTasks) {
+        $cmbSlots.Items.Add("Slot $($t.Slot)")
+    }
+
+    # ========================================
+    # DROPDOWN CHANGE EVENT (PREVIEW UPDATE)
+    # ========================================
+    $cmbSlots.Add_SelectedIndexChanged({
+
+        $selectedText = $cmbSlots.SelectedItem
+
+        if (-not $selectedText) { return }
+
+        $slotNumber = [int]($selectedText -replace '[^\d]', '')
+
+        $task = $tasks | Where-Object { $_.Slot -eq $slotNumber }
+
+        if ($task) {
+            $lblTaskName.Text = $task.TaskName
+            $lblStartTime.Text = (Get-Date $task.StartTime).ToString("yyyy-MM-dd HH:mm:ss")
+        }
+    })
+
+    # Auto-select first item
+    if ($cmbSlots.Items.Count -gt 0) {
+        $cmbSlots.SelectedIndex = 0
+    }
+
+    # ========================================
+    # STOP BUTTON LOGIC
+    # ========================================
+    $btnStop.Add_Click({
+
+        $selectedText = $cmbSlots.SelectedItem
+
+        if (-not $selectedText) {
+            [System.Windows.Forms.MessageBox]::Show("Select a slot.") | Out-Null
+            return
+        }
+
+        $slotNumber = [int]($selectedText -replace '[^\d]', '')
+
+        $tasks = Get-ActiveTasks
+        $task  = $tasks | Where-Object { $_.Slot -eq $slotNumber }
+
+        if (-not $task.IsActive) {
+            [System.Windows.Forms.MessageBox]::Show("Task is not active.") | Out-Null
+            return
+        }
+
+        $start = Get-Date $task.StartTime
+        $stop  = Get-Date
+
+        $mins  = [math]::Round(($stop - $start).TotalMinutes, 2)
+        $hours = [math]::Round(($stop - $start).TotalHours, 2)
+
+        [PSCustomObject]@{
+            Slot            = $task.Slot
+            TaskName        = $task.TaskName
+            StartTime       = $start
+            StopTime        = $stop
+            DurationMinutes = $mins
+            DurationHours   = $hours
+            WorkDate        = $start.ToString("yyyy-MM-dd")
+        } | Export-Csv $SessionLogFile -Append -NoTypeInformation
+
+        Write-Status "TASK STOPPED → Slot $slotNumber | $($task.TaskName) | $hours hrs"
+
+        # Reset slot
+        $task.TaskName  = ""
+        $task.StartTime = $null
+        $task.IsActive  = $false
+
+        Save-ActiveTasks $tasks
+
+        [System.Windows.Forms.MessageBox]::Show("Task stopped successfully.") | Out-Null
+
+        $stopForm.Close()
+    })
+
+    $btnCancel.Add_Click({
+        $stopForm.Close()
+    })
+
+    $stopForm.Add_FormClosed({
+        $form.Show()
+    })
+
+    $stopForm.ShowDialog()
+})
+
+$btnTaskSummary.Add_Click({
+
+    try {
+        # Hide main form
+        $form.Hide()
+
+        # Run summary (this opens DataGridView form)
+        Show-DailyTaskSummary
+    }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Error: $($_.Exception.Message)"
+        ) | Out-Null
+    }
+    finally {
+        # ALWAYS restore main form
+        $form.Show()
+        $form.Activate()
+    }
+
+})
 # ============================================
 # SHOW FORM
 # ============================================
