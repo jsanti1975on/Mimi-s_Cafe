@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FortiGate Subnet Dashboard</title>
+
+<style>
+body {
+    background-color: #06130a;
+    color: #d7ffe0;
+    font-family: monospace;
+}
+
+.container {
+    padding: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.card {
+    border: 1px solid rgba(0,255,120,.25);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(0,0,0,.3);
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+pre {
+    background: rgba(0,0,0,.4);
+    padding: 10px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+}
+
+button {
+    margin-top: 5px;
+    padding: 6px 10px;
+    background: rgba(0,255,120,.1);
+    color: #d7ffe0;
+    border: 1px solid rgba(0,255,120,.3);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgba(0,255,120,.2);
+}
+
+.blink {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0px rgba(0,255,120,0); }
+    50% { box-shadow: 0 0 10px rgba(0,255,120,.7); }
+    100% { box-shadow: 0 0 0px rgba(0,255,120,0); }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>FortiGate Subnet Dashboard</h1>
+<p>Ubuntu Training Node</p>
+
+<div class="grid">
+
+<!-- OPERATOR -->
+<div class="card">
+<h3>Operator Status</h3>
+<pre>
+User: Student-01
+OS: Ubuntu
+Level: 10
+Status: ACTIVE
+</pre>
+</div>
+
+<!-- MISSION -->
+<div class="card">
+<h3 class="blink">Current Mission</h3>
+<pre>
+Bandit Level 10 → 11
+
+Objective:
+Decode base64 file
+
+Target:
+bandit.labs.overthewire.org
+Port: 2220
+</pre>
+</div>
+
+<!-- LAB ACCESS -->
+<div class="card">
+<h3>Lab Access</h3>
+
+<button onclick="window.open('http://dvwa.local')">DVWA</button>
+<button onclick="window.open('http://juiceshop.local')">Juice Shop</button>
+<button onclick="window.open('http://winserver.local')">LDAP Server</button>
+
+</div>
+
+<!-- COMMANDS -->
+<div class="card">
+<h3>Quick Commands</h3>
+
+<pre id="ssh">
+ssh bandit10@bandit.labs.overthewire.org -p 2220
+</pre>
+<button onclick="copyText('ssh')">Copy SSH</button>
+
+<pre id="decode">
+base64 -d data.txt
+</pre>
+<button onclick="copyText('decode')">Copy Decode</button>
+
+<pre id="cat">
+cat data.txt
+</pre>
+<button onclick="copyText('cat')">Copy CAT</button>
+
+</div>
+
+<!-- PROGRESS -->
+<div class="card">
+<h3>Progress Tracker</h3>
+<pre>
+Level 08 ✔
+Level 09 ✔
+Level 10 ✔
+Level 11 ▶ IN PROGRESS
+</pre>
+</div>
+
+<!-- NOTES -->
+<div class="card">
+<h3>Operator Notes</h3>
+<pre>
+- Learned base64 decoding
+- SSH navigation improving
+- Practice file commands
+</pre>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function copyText(id) {
+    var text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+}
+</script>
+
+</body>
+</html>
