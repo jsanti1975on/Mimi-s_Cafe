@@ -2,7 +2,7 @@
 - Desktop to SharePoint
 - m365 Ecosystem
 - Apple Ecosystem [*] | completed 02-09-2026
-  - Assement and full report completed firewall install
+  - Assesment and full report completed & firewall install at <redacted>
   - I need to redact/sanitize the report before upload.
 
 # 02-09-2026
