@@ -18,3 +18,4 @@ File uploads and routing behavior remain unchanged, but the implementation is no
 ### Note to future me!
 - !!!{^_^}LOOKFLAG=> This server.py is for the IoT room.
 - The update is for the IoT dash not the very first server.py in 2024.
+- Update or remove those old pdf's and even the Kali Purple box is gone - NOW!!! using Hyper-v as jump server mainly for (PowerShell) use.
