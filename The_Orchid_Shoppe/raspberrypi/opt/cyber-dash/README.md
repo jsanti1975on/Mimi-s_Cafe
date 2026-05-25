@@ -9,8 +9,8 @@
 ```bash
 /opt/cyber-dash
 ├── Rag_Text/                 # Start with .txt files only (RAG-safe)
-├── cheats/
-│   ├── css/
+├── cheats/                   # It's Summer 2026 installed new os and this dir needs work
+│   ├── css/                  
 │   ├── data/
 │   │   └── tools.json
 │   ├── js/
@@ -41,7 +41,7 @@
 ├── LOG_FILE
 ├── scripts/
 │   ├── server.py
-│   └── start-dashboard.sh
+│   └── start-dashboard.sh <- Moved to working directory
 ├── style.css
 ├── tux-talks.html
 └── uploads/
