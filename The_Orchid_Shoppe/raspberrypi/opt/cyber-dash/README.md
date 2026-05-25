@@ -15,7 +15,7 @@
 │   │   └── tools.json
 │   ├── js/
 │   ├── scripts/
-│   │   └── server.py
+│   │   └── server.py <--- Moved to working directory
 │   ├── tools/
 │   │   ├── dirsearch.html
 │   │   ├── ffuf.html
