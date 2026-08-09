@@ -93,8 +93,41 @@ function Invoke-PhaseOne {
         Add-ConsoleMessage "Selected directory: $rootPath"
         Add-ConsoleMessage 'Recursively snanning files...'
 
-          
-                
-    }
-}
-# 08-09-2026 Startup point
+       # ------------------------------------------------------------
+       # Read filesystem 
+       # ------------------------------------------------------------
+       $results = foreach (
+           $file in Get-ChildPath `
+               -LiteralPath $rootPath `
+               -File `
+               -Recurse `
+               -ErrorAction SilentlyContinue
+       ) {
+           [pscustomobject][ordered]@{
+               FileName    = $file.Name
+               Directory   = $file.DirectoryName
+               FullPath    = $file.FullName
+               Extention   = $file.Extention
+               CreationTime = $file.CreationTime
+               LasrWriteTime = $file.LastWriteTime
+               SizeKB        = [math]::Round(
+                   $file.Length / 1kb,
+                   2
+               ) 
+           }
+       }
+      # ---------------------------------------------------------
+      # Sort oldest LastWriteTime first
+      # ---------------------------------------------------------
+
+      $results = @(
+          $results | 
+              Sort-Object LastWriteTime, CreationTime      
+      )
+
+    add-ConsoleMessage "Files inventoried: $($results.Count)"
+
+    # ---------------------------------------------------------
+    # Export Phase One
+    # ---------------------------------------------------------
+# 08-09-2026 Sop point
