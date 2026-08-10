@@ -1,3 +1,9 @@
+# ESXi RAG Infrastructure Expansion
+
+```bash
+The Mimi’s Cafe cyber range is being expanded with a dedicated ESXi RAG infrastructure designed to preserve and organize technical coursework for retrieval-augmented generation (RAG). An OptiPlex 3060 running ESXi serves as the virtualization host, using a lightweight Ubuntu 26.04 LTS golden template to deploy small, purpose-built RAG nodes such as rag-winadmin, with future nodes dedicated to Linux, Cyber Operations, Information Security, and other coursework. Each node will maintain its own vector data, source documents, ingestion workflows, models, logs, and backups under a standardized /srv/rag structure while sharing a repeatable deployment configuration that includes VMware Tools, Docker, Python, PowerShell, Git, DNS, Kerberos, SSSD, and Active Directory integration with the dubzfort.corp domain. The first node, rag-winadmin, is now successfully registered in DNS, discovering AD services, obtaining Kerberos tickets, and authenticating through the domain, establishing the foundation for a scalable cluster of course-specific knowledge servers within the Mimi’s Cafe lab environment.
+```
+
 # Project Flow: IoT Room has a real POS terminal domain joined
 
 ## Tools: Clockwise
