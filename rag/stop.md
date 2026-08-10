@@ -17,3 +17,25 @@
  ```bash
 I want to build the host inventory collector before we start loading Windows Server Administration material into this machine.
  ```
+### Below is the bash commands
+
+```bash
+echo "===== RAG NODE INVENTORY ====="
+echo "Hostname: $(hostname)"
+echo "FQDN: $(hostname -f)"
+echo "IP:"
+hostname -I
+echo "MAC:"
+ip -br link
+echo "OS:"
+grep PRETTY_NAME /etc/os-release
+echo "VMware Tools:"
+systemctl is-active open-vm-tools
+echo "Docker:"
+docker --version
+echo "=============================="
+```
+
+### Work on the fqdn
+
+<img width="398" height="349" alt="FQDN-IMAGE" src="https://github.com/user-attachments/assets/2d50693e-1d9d-4a98-be57-aa7dcdca23e4" />
