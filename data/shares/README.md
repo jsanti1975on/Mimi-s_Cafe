@@ -1,3 +1,9 @@
+# START OF AUDITS
+
+### Get SMB
+
+```PowerShell
+
 #requires -Version 5.1
 #requires -RunAsAdministrator
 
@@ -300,3 +306,6 @@ $Summary | Set-Content "$AuditRoot\00_Audit_Summary.txt"
 Write-Host ""
 Write-Host "Audit complete." -ForegroundColor Green
 Write-Host "Reports saved to: $AuditRoot" -ForegroundColor Yellow
+```
+
+# Locate the other ones using the evidence tool
