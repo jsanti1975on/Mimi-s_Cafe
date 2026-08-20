@@ -32,3 +32,8 @@ The Mimi’s Cafe cyber range is being expanded with a dedicated ESXi RAG infras
 <img width="622" height="695" alt="2026-08-08 01_09_05-Greenshot" src="https://github.com/user-attachments/assets/b74f8d81-0708-468f-b003-f8151314f625" />
 
  
+# Below are notes as moving forward artifacts and are temp.
+
+```bash
+This project established secure, routed RDP access from the management workstation ABS.dubzfort.corp (10.10.10.21) to the Hyper-V server HV02.dubzfort.corp (172.20.10.104) across the FortiGate and pfSense firewalls. Host-specific address objects and TCP 3389 policies were created, NAT was disabled to preserve the original source address, and pfSense received a static return route for 10.10.10.0/24 through the FortiGate WAN gateway at 172.20.20.2. DNS resolution, Windows Firewall restrictions, routing, TCP connectivity, and the final RDP login were successfully validated, creating a secure and repeatable management path that can scale as the cyber range grows.
+```
