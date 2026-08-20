@@ -7,7 +7,7 @@
 #
 # This script intentionally does not install exploit frameworks, password-
 # cracking suites, DVWA, or Juice Shop. Keep vulnerable targets isolated.
-
+# !!!! NEEDS REVIEW !!!!
 set -Eeuo pipefail
 IFS=$'\n\t'
 
