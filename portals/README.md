@@ -4,5 +4,5 @@
 
 <img width="1090" height="1892" alt="2026-08-22 17_47_17-" src="https://github.com/user-attachments/assets/9cf1a85a-d8ef-4791-a4c6-ea9bbd26a6e9" />
 
-## Next - cont. Nption Database then portal - start with ...
+## Next - cont. Notion Database then work on the portals  - start with ... dubzfort-vsphere-portal troubleshoot. plan Hyper-V design portal
 - First, clean the systemd unit so there are no malformed lines before adding Nginx.
